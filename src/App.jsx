@@ -1,14 +1,15 @@
-import { BrowserRouter, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import RegisterUser from "./pages/RegisterUser";
 
 function App() {
 
   return (
     <>
-      <h1>LANDING PAGE</h1>
-      <BrowserRouter>
+      <Router>
         <Routes>
+        <Route path="/register-user" element={<RegisterUser />} />
         </Routes>
-      </BrowserRouter>
+      </Router>
     </>
   );
 }
