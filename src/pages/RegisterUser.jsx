@@ -58,13 +58,6 @@ const RegisterUser = () => {
           registerOptions={{ required: "Email is required" }}
           error={errors.email}
         />
-        <TextInput
-          name="subscription"
-          label="Subscription"
-          register={register}
-          registerOptions={{ required: "Subscription is required" }}
-          error={errors.subscription}
-        />
         <Button type="submit">Register User</Button>
       </form>
       <LinkButton to='/'>Main Menu</LinkButton>
