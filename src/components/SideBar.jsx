@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import styles from '../styles/SideBar.module.css';
+import styles from '../styles/Sidebar.module.css';
 import Button from './Button';
 
 const Sidebar = ({ onModelSelect }) => {
