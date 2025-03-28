@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from '../styles/PromptForm.module.css';
+import AdvTextInput from './AdvTextInput';
 import Button from './Button';
-import TextInput from './TextInput';
+
 
 const PromptForm = ({
   selectedModel,
@@ -16,7 +17,7 @@ const PromptForm = ({
       <h2 className={styles.title}>AI Assistant ({selectedModel})</h2>
       
       <form onSubmit={handleSubmit} className={styles.form}>
-        <TextInput
+        <AdvTextInput
           name="prompt"
           label="Enter your prompt:"
           value={prompt}
