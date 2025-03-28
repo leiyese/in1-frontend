@@ -11,8 +11,6 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={
-            <button onClick={logout}>Logout</button} />
           <Route path="/register-user" element={<RegisterUser />} />
         </Routes>
       </Router>
