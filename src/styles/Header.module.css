@@ -1,0 +1,44 @@
+.header {
+    background-color: #1f2937; /* bg-gray-800 */
+    color: white;
+    padding: 1rem; /* p-4 */
+  }
+  
+  .headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .buttonsContainer {
+    display: flex;
+    gap: 1rem; /* space-x-4 equivalent */
+  }
+  
+  .profileButton {
+    background-color: #2563eb; /* bg-blue-600 */
+    padding: 0.5rem 1rem; /* px-4 py-2 */
+    border-radius: 0.375rem; /* rounded */
+  }
+  
+  .profileButton:hover {
+    background-color: #1d4ed8; /* hover:bg-blue-700 */
+  }
+  
+  .logoutButton {
+    background-color: #dc2626; /* bg-red-600 */
+    padding: 0.5rem 1rem; /* px-4 py-2 */
+    border-radius: 0.375rem; /* rounded */
+  }
+  
+  .logoutButton:hover {
+    background-color: #b91c1c; /* hover:bg-red-700 */
+  }
+  
+  /* Transition effect for buttons */
+  .profileButton,
+  .logoutButton {
+    transition: background-color 0.2s ease-in-out;
+  }
