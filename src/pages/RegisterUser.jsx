@@ -1,87 +1,68 @@
-import React from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '../components/Button';
+import LinkButton from '../components/LinkButton';
 import TextInput from '../components/TextInput';
+import { registerUser } from '../services/userApi';
 import styles from '../styles/RegisterUser.module.css';
 
+
 const RegisterUser = () => {
-  const { 
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue
-  } = useForm();
-
-  const onSubmit = (data) => {
-    console.log(data);
-    // Handle registration logic
-  };
-
-  return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>Register</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+      reset,
+    } = useForm();
+  
+    const [serverMessage, setServerMessage] = useState("")
+  
+    const onSubmit = async (data) => {
+      try {
+        const response = await registerUser(data)
+        setServerMessage({ type: "register user: success", text: response.message })
+        reset()
+      } catch (error) {
+        setServerMessage({
+          type: "error",
+          text: error.response?.data?.error || "Something went wrong!",
+        })
+      }
+    }
+  
+    return (
+      <div className={styles.formContainer}>
+      <h2>Register User</h2>
+      {serverMessage && (
+        <p>{serverMessage.text}</p>
+      )}
+      <form onSubmit={handleSubmit(onSubmit)}>
         <TextInput
-          name="name"
-          label="Full Name"
-          value={watch('name') || ''}
-          onChange={(e) => setValue('name', e.target.value)}
-          registerOptions={{ required: "Name is required" }}
-          error={errors.name}
+          name="username"
+          label="Username"
+          register={register}
+          registerOptions={{ required: "Username is required" }}
+          error={errors.username}
         />
-
-        <TextInput
-          name="email"
-          label="Email"
-          value={watch('email') || ''}
-          onChange={(e) => setValue('email', e.target.value)}
-          registerOptions={{ 
-            required: "Email is required",
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Invalid email address"
-            }
-          }}
-          error={errors.email}
-        />
-
         <TextInput
           name="password"
           label="Password"
-          type="password"
-          value={watch('password') || ''}
-          onChange={(e) => setValue('password', e.target.value)}
-          registerOptions={{ 
-            required: "Password is required",
-            minLength: {
-              value: 8,
-              message: "Password must be at least 8 characters"
-            }
-          }}
+          register={register}
+          registerOptions={{ required: "Password is required" }}
           error={errors.password}
         />
-
         <TextInput
-          name="confirmPassword"
-          label="Confirm Password"
-          type="password"
-          value={watch('confirmPassword') || ''}
-          onChange={(e) => setValue('confirmPassword', e.target.value)}
-          registerOptions={{ 
-            required: "Please confirm your password",
-            validate: value => 
-              value === watch('password') || "Passwords don't match"
-          }}
-          error={errors.confirmPassword}
+          name="email"
+          label="Email"
+          register={register}
+          registerOptions={{ required: "Email is required" }}
+          error={errors.email}
         />
-
-        <Button type="submit" variant="primary" className={styles.submitButton}>
-          Register
-        </Button>
+        <Button type="submit">Register User</Button>
       </form>
+      <LinkButton to='/'>Main Menu</LinkButton>
     </div>
-  );
-};
-
-export default RegisterUser;
+    )
+  }
+  
+  export default RegisterUser
