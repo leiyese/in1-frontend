@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
-// Adjust this base URL to match your Flask API server's address
+
 const API_BASE_URL = 'http://localhost:5010/subscriptions';
 
 
@@ -15,17 +15,21 @@ export const fetchSubscriptionTypes = async () => {
 };
 
 /**
- * When a user clicks on a subscription plan, call this function
- * to create a subscription linked to that user.
+
  *
- * @param {number|string} subscriptionId - The ID of the chosen subscription plan.
- * @param {number|string} userId - The ID of the user.
+ * @param {number|string} subscriptionId 
+ * @param {number|string} userId 
  */
 export const createUserSubscription = async (subscriptionId, userId) => {
     try {
-        const response = await axiosInstance.post(`${API_BASE_URL}/create_subscription`, {
+        const requestData = {
+            date: new Date().toISOString(), // Current date in ISO format,
             subscriptions_type_id: subscriptionId,
             user_id: userId,  
+        };
+
+        const response = await axiosInstance.post(`${API_BASE_URL}/create_subscription`, {
+            data: requestData
         });
         return response.data;
     } catch (error) {
@@ -34,17 +38,3 @@ export const createUserSubscription = async (subscriptionId, userId) => {
     }
 };
 
-/**
- * Example usage in a UI component:
- *
- * const handleSubscriptionClick = async (subscriptionId) => {
- *   try {
- *     // Assuming you have the user's id from your auth context or state.
- *     const userId = getCurrentUserId();
- *     const result = await createUserSubscription(subscriptionId, userId);
- *     // Process the result, e.g., update UI, show confirmation, etc.
- *   } catch (error) {
- *     alert('Failed to create subscription.');
- *   }
- * };
- */

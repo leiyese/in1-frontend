@@ -29,7 +29,7 @@ const Login = () => {
     };
 
     const navMainMenu = () => {
-        navigate("/user-info");
+        navigate("/");
     };
 
     return (
