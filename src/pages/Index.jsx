@@ -4,19 +4,38 @@ import Header from '../components/Header';
 import PromptForm from '../components/PromptForm';
 import Sidebar from '../components/Sidebar';
 import styles from '../styles/Index.module.css';
+import { logout } from '../services/authApi';
+import { useNavigate } from 'react-router-dom';
+
 
 const Index = () => {
   const [selectedModel, setSelectedModel] = useState('gpt-4');
   const [prompt, setPrompt] = useState('');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  
+  const navigate = useNavigate();
 
   const handleProfileClick = () => {
     console.log('Profile clicked');
   };
 
-  const handleLogoutClick = () => {
-    console.log('Logout clicked');
+  const handleSubcriptionClick = () => {
+    navigate('/subscription');
+    console.log('Subscription clicked');
+    const userId = localStorage.getItem('userId') || 'unknown';
+    console.log('Current user id:', userId);
+  }
+
+  
+  const handleLogoutClick = async () => {
+    try {
+      await logout();
+      console.log('Logout successful');
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   const handleModelSelect = (modelId) => {
@@ -46,6 +65,7 @@ const Index = () => {
       <Header 
         onProfileClick={handleProfileClick} 
         onLogoutClick={handleLogoutClick} 
+        onSubcriptionClick={handleSubcriptionClick}
       />
       
       <div className={styles.content}>
