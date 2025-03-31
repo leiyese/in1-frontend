@@ -1,51 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../styles/PromptForm.module.css';
 import AdvTextInput from './AdvTextInput';
 import Button from './Button';
 
+const PromptForm = ({ onSubmit, isLoading, selectedModel }) => {
+  const [prompt, setPrompt] = useState('');
 
-const PromptForm = ({
-  selectedModel,
-  prompt,
-  setPrompt,
-  isLoading,
-  handleSubmit,
-  response
-}) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(prompt);
+    setPrompt('');
+  };
+
   return (
-    <div className={styles.promptContainer}>
-      <h2 className={styles.title}>AI Assistant ({selectedModel})</h2>
-      
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <AdvTextInput
-          name="prompt"
-          label="Enter your prompt:"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          className={styles.textarea}
-          as="textarea"
-          rows={4}
-          placeholder="Ask me anything..."
-          disabled={isLoading}
-        />
-        
-        <Button
-          type="submit"
-          disabled={isLoading}
-          className={styles.submitButton}
-          variant="primary"
-        >
-          {isLoading ? 'Processing...' : 'Submit'}
-        </Button>
-      </form>
-      
-      {response && (
-        <div className={styles.responseContainer}>
-          <h3 className={styles.responseTitle}>Response:</h3>
-          <div className={styles.responseText}>{response}</div>
-        </div>
-      )}
-    </div>
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <AdvTextInput
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+        placeholder={`Message ${selectedModel}...`}
+        disabled={isLoading}
+        multiline
+        rows={1}
+        className={styles.input}
+      />
+      <Button
+        type="submit"
+        disabled={isLoading || !prompt.trim()}
+        variant="primary"
+        className={styles.button}
+      >
+        {isLoading ? (
+          <span className={styles.loadingText}>Sending...</span>
+        ) : (
+          'Send'
+        )}
+      </Button>
+    </form>
   );
 };
 

@@ -1,38 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import MessageDisplay from '../components/MessageDisplay';
 import PromptForm from '../components/PromptForm';
 import Sidebar from '../components/Sidebar';
-import styles from '../styles/Index.module.css';
+import { fetchAiResponse } from '../services/aiApi';
 import { logout } from '../services/authApi';
-import { useNavigate } from 'react-router-dom';
-
+import styles from '../styles/Index.module.css';
 
 const Index = () => {
   const [selectedModel, setSelectedModel] = useState('gpt-4');
-  const [prompt, setPrompt] = useState('');
-  const [response, setResponse] = useState('');
+  const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef(null);
   
   const navigate = useNavigate();
 
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   const handleProfileClick = () => {
     navigate('/profile-page');
-    console.log('Profile clicked');
   };
 
   const handleSubcriptionClick = () => {
     navigate('/subscription');
-    console.log('Subscription clicked');
     const userId = localStorage.getItem('userId') || 'unknown'; 
     console.log('Current user id:', userId);
-  }
+  };
 
-  
   const handleLogoutClick = async () => {
     try {
       await logout();
-      console.log('Logout successful');
       navigate('/login');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -43,19 +45,25 @@ const Index = () => {
     setSelectedModel(modelId);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!prompt.trim()) return;
+  const handleSubmit = async (promptText) => {
+    if (!promptText.trim()) return;
     
+    // Add user message to chat
+    const userMessage = { role: 'user', content: promptText };
+    setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
     
     try {
-      const mockApiResponse = `This is a mock response from ${selectedModel} for: "${prompt}"`;
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setResponse(mockApiResponse);
+      const systemRole = "You are a helpful AI assistant that speaks baby language.";
+      const aiResponse = await fetchAiResponse(selectedModel, promptText, systemRole);
+      
+      // Add AI response to chat
+      const aiMessage = { role: 'assistant', content: aiResponse };
+      setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
-      console.error('Error calling AI API:', error);
-      setResponse('Error: Failed to get response from AI');
+      console.error("Error fetching AI response:", error);
+      const errorMessage = { role: 'assistant', content: "Error: Failed to get response from AI" };
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -73,14 +81,32 @@ const Index = () => {
         <Sidebar onModelSelect={handleModelSelect} />
         
         <main className={styles.main}>
-          <PromptForm
-            selectedModel={selectedModel}
-            prompt={prompt}
-            setPrompt={setPrompt}
-            isLoading={isLoading}
-            handleSubmit={handleSubmit}
-            response={response}
-          />
+          <div className={styles.chatContainer}>
+            {/* Message display area */}
+            <div className={styles.messagesWrapper}>
+              {messages.length === 0 ? (
+                <div className={styles.welcomeMessage}>
+                  <h2>Welcome to AI Assistant ({selectedModel})</h2>
+                  <p>Start by typing a message below</p>
+                </div>
+              ) : (
+                <MessageDisplay messages={messages} />
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+            
+            {/* Fixed prompt input at bottom */}
+            <div className={styles.promptWrapper}>
+              <PromptForm
+                onSubmit={handleSubmit}
+                isLoading={isLoading}
+                selectedModel={selectedModel}
+              />
+              <div className={styles.disclaimer}>
+                AI Assistant may produce inaccurate information
+              </div>
+            </div>
+          </div>
         </main>
       </div>
       
