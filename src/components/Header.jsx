@@ -1,13 +1,16 @@
 import React from 'react';
 import styles from '../styles/Header.module.css';
 import Button from './Button';
-import Logo from './Logo';
+import logoImage from '../assets/logo_in1.jpg'; // Adjust the path to your logo image
 
 const Header = ({ onProfileClick, onLogoutClick, onSubcriptionClick }) => {
   return (
     <header className={styles.header}>
       <div className={styles.headerContainer}>
-        <Logo />
+        <div className={styles.logoContainer}>
+            <img src={logoImage} alt="Company Logo" className={styles.logo} />
+            <span>In1</span> {/* Optional: Add your company name */}
+          </div>
         
         <div className={styles.buttonsContainer}>
         <Button
