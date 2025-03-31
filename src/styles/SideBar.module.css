@@ -1,0 +1,47 @@
+.sidebar {
+    width: 16rem; /* w-64 */
+    background-color: #f3f4f6; /* bg-gray-100 */
+    padding: 1rem; /* p-4 */
+    height: 100%;
+  }
+  
+  .sidebarTitle {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 600; /* font-semibold */
+    margin-bottom: 1rem; /* mb-4 */
+  }
+  
+  .modelList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* space-y-2 equivalent */
+  }
+  
+  .modelItem {
+    width: 100%;
+  }
+  
+  .modelButton {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem; /* p-2 */
+    border-radius: 0.25rem; /* rounded */
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .modelButton:hover {
+    background-color: #e5e7eb; /* hover:bg-gray-200 */
+  }
+  
+  .activeModel {
+    background-color: #3b82f6; /* bg-blue-500 */
+    color: white;
+  }
+  
+  .modelName {
+    font-weight: 500; /* font-medium */
+  }
+  
+  .modelDescription {
+    font-size: 0.875rem; /* text-sm */
+  }
