@@ -1,0 +1,56 @@
+.promptContainer {
+    max-width: 64rem; /* max-w-4xl */
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .title {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 700; /* font-bold */
+    margin-bottom: 1.5rem; /* mb-6 */
+  }
+  
+  .form {
+    margin-bottom: 1.5rem; /* mb-6 */
+  }
+  
+  .textarea {
+    width: 100%;
+    padding: 0.75rem; /* p-3 */
+    border: 1px solid #d1d5db; /* border-gray-300 */
+    border-radius: 0.5rem; /* rounded-lg */
+    margin-bottom: 1rem; /* mb-4 */
+  }
+  
+  .textarea:focus {
+    outline: none;
+    border-color: #3b82f6; /* focus:border-blue-500 */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); /* focus:ring-blue-500 */
+  }
+  
+  .submitButton {
+    padding: 0.5rem 1.5rem; /* px-6 py-2 */
+    border-radius: 0.5rem; /* rounded-lg */
+  }
+  
+  .submitButton:disabled {
+    background-color: #60a5fa; /* disabled:bg-blue-400 */
+    cursor: not-allowed;
+  }
+  
+  .responseContainer {
+    margin-top: 1.5rem; /* mt-6 */
+    padding: 1rem; /* p-4 */
+    background-color: white;
+    border: 1px solid #e5e7eb; /* border-gray-200 */
+    border-radius: 0.5rem; /* rounded-lg */
+  }
+  
+  .responseTitle {
+    font-weight: 600; /* font-semibold */
+    margin-bottom: 0.5rem; /* mb-2 */
+  }
+  
+  .responseText {
+    white-space: pre-wrap;
+  }

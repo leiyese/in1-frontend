@@ -1,12 +1,23 @@
-import clsx from 'clsx'; // Optional, makes class merging cleaner
+import clsx from 'clsx';
 import styles from '../styles/Button.module.css';
 
-const Button = ({ onClick, className = '', children, type = 'submit', ...props }) => {
+const Button = ({ 
+  onClick, 
+  className = '', 
+  children, 
+  type = 'button',
+  variant = 'primary',
+  ...props 
+}) => {
   return (
     <button
-      type={type} // Ensures the button has a default type
+      type={type}
       onClick={onClick}
-      className={clsx(styles.button, className)} // Merges classes safely
+      className={clsx(
+        styles.button,
+        styles[variant],
+        className
+      )}
       {...props}
     >
       {children}

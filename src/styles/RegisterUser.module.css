@@ -1,0 +1,14 @@
+/* In RegisterUser.module.css */
+.errorMessage {
+    color: #dc2626; /* red-600 */
+  }
+  
+  .successMessage {
+    color: #16a34a; /* green-600 */
+  }
+  
+  .formContainer {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
