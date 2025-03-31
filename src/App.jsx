@@ -1,9 +1,10 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import ProfilePage from "./pages/ProfilePage";
 import RegisterUser from "./pages/RegisterUser";
-import UserInfoPage from "./pages/UserExample";
 import Subscription from "./pages/Subscription";
+import UserInfoPage from "./pages/UserExample";
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
           <Route path="/user-info" element={<UserInfoPage />} />
           <Route path="/" element={<Index />} />
           <Route path = "/subscription" element={<Subscription />} />
+          <Route path = "/profile-page" element={<ProfilePage />} />        
         </Routes>
       </Router>
     </>
