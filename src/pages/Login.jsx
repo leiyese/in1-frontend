@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { login } from '../services/authApi';
+import { login, logout } from '../services/authApi';
 import { useNavigate } from "react-router-dom";
+import Header from '../components/Header';
+import Button from '../components/Button';
+import AdvTextInput from '../components/AdvTextInput';
+import Footer from '../components/Footer';
 
 const Login = () => {
     const {
@@ -31,35 +35,62 @@ const Login = () => {
     const navMainMenu = () => {
         navigate("/");
     };
+    const handleProfileClick = () => {
+        navigate('/profile-page');
+        console.log('Profile clicked');
+    };
+
+    const handleSubcriptionClick = () => {
+        navigate('/subscription');
+        console.log('Subscription clicked');
+        const userId = localStorage.getItem('userId') || 'unknown'; 
+        console.log('Current user id:', userId);
+    }
+
+    
+    const handleLogoutClick = async () => {
+        try {
+        await logout();
+        console.log('Logout successful');
+        navigate('/login');
+        } catch (error) {
+        console.error('Logout failed:', error);
+        }
+    };
 
     return (
         <div>
-            <h2>Login</h2>
-            {serverMessage && (
-                <p>{serverMessage.text}</p>
-            )}
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <input
-                    type="text"
-                    name="username"
-                    placeholder="Username"
-                    {...register("username", { required: "Username is required" })} // Register input
-                />
-                {errors.username && <span>{errors.username.message}</span>}
-                <br />
-
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    {...register("password", { required: "Password is required" })} // Register input
-                />
-                {errors.password && <span>{errors.password.message}</span>}
-                <br />
-
-                <button type="submit">Login</button>
-            </form>
-            <a href="/">Main Menu</a>
+            <Header
+                onProfileClick={handleProfileClick} 
+                onLogoutClick={handleLogoutClick} 
+                onSubcriptionClick={handleSubcriptionClick}
+            />
+            <div className="container">
+                <h1>Login</h1>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <AdvTextInput
+                        label="Username"
+                        name="username"
+                        type="username"
+                        {...register("username", { required: "Username is required" })}
+                        error={errors.username}
+                    />
+                    <AdvTextInput
+                        label="Password"
+                        name="password"
+                        type="password"
+                        {...register("password", { required: "Password is required" })}
+                        error={errors.password}
+                    />
+                    <Button type="submit">Login</Button>
+                </form>
+                {serverMessage && (
+                    <div className={`message ${serverMessage.type}`}>
+                        {serverMessage.text}
+                    </div>
+                )}
+            </div>
+            <Footer />
         </div>
     );
 };
