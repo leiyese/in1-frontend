@@ -44,20 +44,21 @@ const Subscription = () => {
     };
 
     return (
-        <div>
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Header />
-            <h2>Subscription</h2>
-            {serverMessage && <p>{serverMessage.text}</p>}
-            <div className={styles.container}>
-                {subscriptionTypes.map((type) => (
-                    <SubscriptionCard
-                        key={type.id}
-                        subscription={type}
-                        onSubscribe={handleSubscribe}
-                    />
-                ))}
-            </div>
-            <a href="/">Main Menu</a>
+            <main style={{ flex: '1', padding: '20px' }}>
+                <h2 style={{ textAlign: 'center' }}>Choose a subscription plan</h2>
+                {serverMessage && <p>{serverMessage.text}</p>}
+                <div className={styles.container}>
+                    {subscriptionTypes.map((type) => (
+                        <SubscriptionCard
+                            key={type.id}
+                            subscription={type}
+                            onSubscribe={handleSubscribe}
+                        />
+                    ))}
+                </div>
+            </main>
         </div>
     );
 };
