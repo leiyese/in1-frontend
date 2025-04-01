@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
-import AdvTextInput from '../components/AdvTextInput';
+import Header from '../components/Header';
 import Button from '../components/Button';
+import UserTextInput from '../components/UserTextInput';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { login } from '../services/authApi';
@@ -18,22 +19,16 @@ const Login = () => {
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        console.log("login data:", data); // Log the form data
-
         try {
             const response = await login(data);
             setServerMessage({ type: "success", text: response.message });
-            navMainMenu();
+            navigate("/"); // Navigate to the main menu on success
         } catch (error) {
             setServerMessage({
                 type: "error",
                 text: error.response?.data?.error || "An error occurred",
             });
         }
-    };
-
-    const navMainMenu = () => {
-        navigate("/");
     };
 
     return (
@@ -61,26 +56,33 @@ const Login = () => {
                         maxWidth: "400px",
                     }}
                 >
-                    <AdvTextInput
-                        label="Username"
-                        name="username"
-                        type="username"
-                        {...register("username", { required: "Username is required" })}
-                        error={errors.username}
-                    />
-                    <AdvTextInput
-                        label="Password"
-                        name="password"
-                        type="password"
-                        {...register("password", { required: "Password is required" })}
-                        error={errors.password}
-                    />
+                <UserTextInput
+                label="Username"
+                name="username"
+                type="text"
+                register={register}  // Pass register function here
+                registerOptions={{ required: "Username is required" }}
+                error={errors.username}
+                />
+                <UserTextInput
+                label="Password"
+                name="password"
+                type="password"
+                register={register}  // Pass register function here
+                registerOptions={{ required: "Password is required" }}
+                error={errors.password}
+                />
                     <div style={{ marginTop: "1rem" }}>
                         <Button type="submit">Login</Button>
                     </div>
                 </form>
                 {serverMessage && (
-                    <div className={`message ${serverMessage.type}`}>
+                    <div
+                        style={{
+                            marginTop: "1rem",
+                            color: serverMessage.type === "success" ? "green" : "red",
+                        }}
+                    >
                         {serverMessage.text}
                     </div>
                 )}

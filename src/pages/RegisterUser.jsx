@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '../components/Button';
-import AdvTextInput from '../components/AdvTextInput';
+import UserTextInput from '../components/UserTextInput';
 import { registerUser } from '../services/userApi';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useNavigate } from "react-router-dom";
 
 const RegisterUser = () => {
     const {
@@ -17,17 +18,23 @@ const RegisterUser = () => {
     const [serverMessage, setServerMessage] = useState("");
 
     const onSubmit = async (data) => {
+        console.log("Register data:", data);
+        navigate('/login')  // Log the form data for debugging
+
         try {
-            const response = await registerUser(data);
+            const response = await registerUser(data);  // Call the API with the form data
             setServerMessage({ type: "success", text: response.message });
-            reset();
+            reset();  // Reset the form fields
         } catch (error) {
+            console.log(data);  // Log data in case of error to debug
             setServerMessage({
                 type: "error",
                 text: error.response?.data?.error || "Something went wrong!",
             });
         }
     };
+
+    const navigate = useNavigate();
 
     return (
         <div>
@@ -48,7 +55,7 @@ const RegisterUser = () => {
                     <p style={{ marginBottom: "1rem" }}>{serverMessage.text}</p>
                 )}
                 <form
-                    onSubmit={handleSubmit(onSubmit)}
+                    onSubmit={handleSubmit(onSubmit)}  // Handle form submission
                     style={{
                         display: "flex",
                         flexDirection: "column",
@@ -57,26 +64,26 @@ const RegisterUser = () => {
                         maxWidth: "400px",
                     }}
                 >
-                    <AdvTextInput
+                    <UserTextInput
                         name="username"
                         label="Username"
-                        register={register}
-                        registerOptions={{ required: "Username is required" }}
-                        error={errors.username}
+                        register={register}  // Pass register function here
+                        registerOptions={{ required: "Username is required" }}  // Validation rule
+                        error={errors.username}  // Display error message if there's any
                     />
-                    <AdvTextInput
+                    <UserTextInput
                         name="password"
                         label="Password"
-                        register={register}
-                        registerOptions={{ required: "Password is required" }}
-                        error={errors.password}
+                        register={register}  // Pass register function here
+                        registerOptions={{ required: "Password is required" }}  // Validation rule
+                        error={errors.password}  // Display error message if there's any
                     />
-                    <AdvTextInput
+                    <UserTextInput
                         name="email"
                         label="Email"
-                        register={register}
-                        registerOptions={{ required: "Email is required" }}
-                        error={errors.email}
+                        register={register}  // Pass register function here
+                        registerOptions={{ required: "Email is required" }}  // Validation rule
+                        error={errors.email}  // Display error message if there's any
                     />
                     <div style={{ marginTop: "1rem" }}>
                         <Button type="submit">Register User</Button>
