@@ -1,47 +1,55 @@
 .sidebar {
-    width: 16rem; /* w-64 */
-    background-color: #f3f4f6; /* bg-gray-100 */
-    padding: 1rem; /* p-4 */
-    height: 100%;
-  }
-  
-  .sidebarTitle {
-    font-size: 1.125rem; /* text-lg */
-    font-weight: 600; /* font-semibold */
-    margin-bottom: 1rem; /* mb-4 */
-  }
-  
-  .modelList {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem; /* space-y-2 equivalent */
-  }
-  
-  .modelItem {
-    width: 100%;
-  }
-  
-  .modelButton {
-    width: 100%;
-    text-align: left;
-    padding: 0.5rem; /* p-2 */
-    border-radius: 0.25rem; /* rounded */
-    transition: all 0.2s ease-in-out;
-  }
-  
-  .modelButton:hover {
-    background-color: #e5e7eb; /* hover:bg-gray-200 */
-  }
-  
-  .activeModel {
-    background-color: #3b82f6; /* bg-blue-500 */
-    color: white;
-  }
-  
-  .modelName {
-    font-weight: 500; /* font-medium */
-  }
-  
-  .modelDescription {
-    font-size: 0.875rem; /* text-sm */
-  }
+  width: 12rem; /* Slim the sidebar */
+  background-color: #f3f4f6;
+  padding: 1rem;
+  height: 100%; /* Full height of the content area */
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e5e7eb;
+  overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+.sidebarTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem; /* Add more spacing below the title */
+  color: #333;
+}
+
+.modelList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Add spacing between items */
+}
+
+.modelItem {
+  width: 100%;
+}
+
+.modelButton {
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease-in-out;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+.modelButton:hover {
+  background-color: #e5e7eb;
+}
+
+.activeModel {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.modelName {
+  font-weight: 500;
+}
+
+.modelDescription {
+  font-size: 0.875rem;
+  color: #6b7280;
+}

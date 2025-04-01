@@ -1,68 +1,69 @@
 .container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh; /* Full viewport height */
   background-color: #f7f7f8;
 }
 
+.header {
+  flex-shrink: 0; /* Prevent the header from shrinking */
+}
+
 .content {
+  flex: 1; /* Fills remaining vertical space */
   display: flex;
-  flex: 1;
   overflow: hidden;
+}
+
+.sidebar {
+  width: 12rem; /* Slim the sidebar */
+  background-color: #f3f4f6;
+  padding: 1rem;
+  height: 100%; /* Full height of the content area */
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e5e7eb;
+  overflow-y: auto; /* Allow scrolling if content overflows */
 }
 
 .main {
-  flex: 1;
+  flex: 1; /* Takes remaining space in content */
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: hidden; /* Prevent internal overflow */
   position: relative;
 }
 
+.footer {
+  flex-shrink: 0; /* Prevent the footer from shrinking */
+}
+
+/* Chat container takes all available vertical space in main */
 .chatContainer {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1;
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
   padding: 0 1rem;
 }
 
+/* Messages area grows to fill vertical space */
 .messagesWrapper {
   flex: 1;
+  width: 100%;
   overflow-y: auto;
   padding: 1rem 0;
   scroll-behavior: smooth;
 }
 
-.welcomeMessage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  text-align: center;
-  color: #6e6e80;
-  padding: 2rem;
-}
-
-.welcomeMessage h2 {
-  font-size: 1.75rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #000;
-}
-
-.welcomeMessage p {
-  font-size: 1rem;
-  margin-bottom: 2rem;
-}
-
+/* Prompt area is always pushed to the bottom */
 .promptWrapper {
+  margin-top: auto;
   padding: 1rem 0 2rem;
-  position: relative;
   width: 100%;
+  position: relative;
 }
 
 .disclaimer {

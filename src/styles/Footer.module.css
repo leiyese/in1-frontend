@@ -1,10 +1,11 @@
 .footer {
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
   text-align: center;
   font-size: 0.75rem;
   color: #6e6e80;
   border-top: 1px solid #e5e5e6;
   background-color: #ffffff;
+  flex-shrink: 0; /* Prevent the footer from shrinking */
 }
 
 .footerLinks {
