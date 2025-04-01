@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import MessageDisplay from '../components/MessageDisplay';
 import PromptForm from '../components/PromptForm';
-import Sidebar from '../components/Sidebar';
+import SideBar from '../components/SideBar';
 import { fetchAiResponse } from '../services/aiApi';
 import { logout } from '../services/authApi';
 import styles from '../styles/Index.module.css';
@@ -78,7 +78,7 @@ const Index = () => {
       />
       
       <div className={styles.content}>
-        <Sidebar onModelSelect={handleModelSelect} />
+        <SideBar onModelSelect={handleModelSelect} />
         
         <main className={styles.main}>
           <div className={styles.chatContainer}>
