@@ -37,8 +37,10 @@ const Header = () => {
     <header className={styles.header}>
       <div className={styles.headerContainer}>
         <div className={styles.logoContainer}>
+          <a href="/">
             <img src={logoImage} alt="Company Logo" className={styles.logo} />
-            <span>In1</span> {/* Optional: Add your company name */}
+            <Button onClick={() => navigate('/')} variant="primary">Home</Button>
+            </a>
           </div>
         
         <div className={styles.buttonsContainer}>
