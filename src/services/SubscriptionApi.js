@@ -37,4 +37,35 @@ export const createUserSubscription = async (subscriptionId, userId) => {
         throw error;
     }
 };
+/** 
+* Update a user subscription.
+* 
+* @param {number|string} subscriptionId - The subscription id to update.
+* @param {object} updatedData - An object containing the updated fields, e.g. { subscriptions_type_id, date, user_id }
+*/
+export const updateUserSubscription = async (subscriptionId, updatedData) => {
+   try {
+       const response = await axiosInstance.put(`${API_BASE_URL}/update_subscription/${subscriptionId}`, {
+           data: updatedData
+       });
+       return response.data;
+   } catch (error) {
+       console.error('Error updating user subscription:', error);
+       throw error;
+   }
+};
 
+/**
+ * Delete a user subscription.
+ * 
+ * @param {number|string} subscriptionId - The subscription id to delete.
+ */
+export const deleteUserSubscription = async (subscriptionId) => {
+    try {
+        const response = await axiosInstance.delete(`${API_BASE_URL}/delete_subscription/${subscriptionId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting user subscription:', error);
+        throw error;
+    }
+};
