@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import styles from '../styles/Sidebar.module.css';
+import styles from '../styles/SideBar.module.css';
 import Button from './Button';
 
-const Sidebar = ({ onModelSelect }) => {
+const SideBar = ({ onModelSelect }) => {
   const [activeModel, setActiveModel] = useState('gpt-4');
   
   const models = [
@@ -43,4 +43,4 @@ const Sidebar = ({ onModelSelect }) => {
   );
 };
 
-export default Sidebar;
+export default SideBar;
