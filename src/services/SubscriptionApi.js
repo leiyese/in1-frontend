@@ -1,12 +1,10 @@
 import axiosInstance from "./axiosInstance";
 
-
 const API_BASE_URL = 'http://localhost:5010/subscriptions';
-
 
 export const fetchSubscriptionTypes = async () => {
     try {
-        const response = await axiosInstance.get(`${API_BASE_URL}/get_subscription_types`);
+        const response = await axiosInstance.get(`subscriptions/get_subscription_types`);
         return response.data;
     } catch (error) {
         console.error('Error fetching subscription types:', error);
@@ -15,44 +13,23 @@ export const fetchSubscriptionTypes = async () => {
 };
 
 /**
-
- *
- * @param {number|string} subscriptionId 
- * @param {number|string} userId 
+ * Create or update a user subscription.
+ * 
+ * @param {number|string} subscriptionId - The subscription type id
+ * @param {number|string} userId - The user id
  */
 export const createUserSubscription = async (subscriptionId, userId) => {
     try {
-        const requestData = {
-            date: new Date().toISOString(), // Current date in ISO format,
+        // This endpoint now handles both creating and updating
+        const response = await axiosInstance.post(`subscriptions/create_subscription_and_update_user`, {
             subscriptions_type_id: subscriptionId,
-            user_id: userId,  
-        };
-
-        const response = await axiosInstance.post(`${API_BASE_URL}/create_subscription`, {
-            data: requestData
+            user_id: userId,
         });
         return response.data;
     } catch (error) {
-        console.error('Error creating user subscription:', error);
+        console.error('Error creating/updating user subscription:', error);
         throw error;
     }
-};
-/** 
-* Update a user subscription.
-* 
-* @param {number|string} subscriptionId - The subscription id to update.
-* @param {object} updatedData - An object containing the updated fields, e.g. { subscriptions_type_id, date, user_id }
-*/
-export const updateUserSubscription = async (subscriptionId, updatedData) => {
-   try {
-       const response = await axiosInstance.put(`${API_BASE_URL}/update_subscription/${subscriptionId}`, {
-           data: updatedData
-       });
-       return response.data;
-   } catch (error) {
-       console.error('Error updating user subscription:', error);
-       throw error;
-   }
 };
 
 /**
@@ -62,10 +39,24 @@ export const updateUserSubscription = async (subscriptionId, updatedData) => {
  */
 export const deleteUserSubscription = async (subscriptionId) => {
     try {
-        const response = await axiosInstance.delete(`${API_BASE_URL}/delete_subscription/${subscriptionId}`);
+        const response = await axiosInstance.delete(`subscriptions/delete_subscription/${subscriptionId}`);
         return response.data;
     } catch (error) {
         console.error('Error deleting user subscription:', error);
+        throw error;
+    }
+};
+
+export const getUserSubscription = async (userId) => {
+    try {
+        const response = await axiosInstance.get(`subscriptions/get_user_subscription/${userId}`);
+        return response.data;
+    } catch (error) {
+        if (error.response?.status === 404) {
+            // Return null if subscription not found (404)
+            return null;
+        }
+        console.error('Error fetching user subscription:', error);
         throw error;
     }
 };

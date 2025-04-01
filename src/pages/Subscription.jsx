@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { fetchSubscriptionTypes, createUserSubscription, updateUserSubscription, deleteUserSubscription } from '../services/SubscriptionApi';
+import { fetchSubscriptionTypes, createUserSubscription, deleteUserSubscription, getUserSubscription} from '../services/SubscriptionApi';
 import { getProtectedData } from '../services/authApi';
 import { useNavigate } from 'react-router-dom';
 import SubscriptionCard from '../components/SubscriptionCard';
 import Header from '../components/Header';
 import styles from '../styles/SubscriptionCard.module.css';
 import AnnoyingCancelButton from '../components/AnnoyingCancelButton';
+import axiosInstance from '../services/axiosInstance';
 
 const Subscription = () => {
     const [serverMessage, setServerMessage] = useState("");
@@ -35,6 +36,20 @@ const Subscription = () => {
                 const userData = await getProtectedData();
                 setUserId(userData.logged_in_as);
                 setUsername(userData.username);
+                
+                // Use the dedicated endpoint to get user's subscription
+                try {
+                    const userSubscription = await getUserSubscription(userData.logged_in_as);
+                    if (userSubscription) {
+                        console.log("Found user subscription:", userSubscription);
+                        setCurrentSubscription(userSubscription);
+                    } else {
+                        console.log("User has no active subscription");
+                        setCurrentSubscription(null);
+                    }
+                } catch (err) {
+                    console.error("Error fetching user subscription:", err);
+                }
             } catch (error) {
                 console.error("User not logged in", error);
             }
@@ -52,56 +67,51 @@ const Subscription = () => {
             });
             return;
         }
-        // If there's no active subscription, create one.
-        if (!currentSubscription) {
-            try {
-                const response = await createUserSubscription(subscriptionId, userId);
-                setServerMessage({
-                    type: "success",
-                    text: response.message
-                });
-                // Assume response includes subscriptions_type_id along with other subscription data
-                setCurrentSubscription(response);
-            } catch (error) {
-                setServerMessage({
-                    type: "error",
-                    text: error.response?.data?.error || "An error occurred"
-                });
-            }
-        } else {
-            // If the selected type is different from the current one, update.
-            if (currentSubscription.subscriptions_type_id !== subscriptionId) {
-                try {
-                    const response = await updateUserSubscription(subscriptionId, {
-                        date: new Date().toISOString(),
-                        subscriptions_type_id: subscriptionId,
-                        user_id: userId
-                    });
-                    setServerMessage({
-                        type: "success",
-                        text: response.message
-                    });
-                    setCurrentSubscription(response);
-                } catch (error) {
-                    setServerMessage({
-                        type: "error",
-                        text: error.response?.data?.error || "Update failed"
-                    });
-                }
-            }
+        
+        try {
+            // Use the same function for both creating and updating
+            const response = await createUserSubscription(subscriptionId, userId);
+            setServerMessage({
+                type: "success",
+                text: response.message
+            });
+            // Update the current subscription with the response
+            setCurrentSubscription(response);
+        } catch (error) {
+            setServerMessage({
+                type: "error",
+                text: error.response?.data?.error || "An error occurred"
+            });
         }
     };
 
     const handleCancelSubscription = async () => {
-        if (!currentSubscription) return;
+        if (!currentSubscription) {
+            console.error("No current subscription to cancel");
+            return;
+        }
+        
+        console.log("Attempting to cancel subscription:", currentSubscription); // Debug log
+        
+        // Make sure we have a valid subscription id
+        if (!currentSubscription.id) {
+            setServerMessage({
+                type: "error",
+                text: "Cannot cancel subscription: Missing subscription ID"
+            });
+            return;
+        }
+        
         try {
             const response = await deleteUserSubscription(currentSubscription.id);
+            console.log("Cancellation response:", response);
             setServerMessage({
                 type: "success",
                 text: response.message || "Subscription cancelled successfully."
             });
             setCurrentSubscription(null);
         } catch (error) {
+            console.error("Error cancelling subscription:", error);
             setServerMessage({
                 type: "error",
                 text: error.response?.data?.error || "Failed to cancel subscription."
