@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { fetchSubscriptionTypes, createUserSubscription } from '../services/SubscriptionApi';
+import { fetchSubscriptionTypes, createUserSubscription, updateUserSubscription, deleteUserSubscription } from '../services/SubscriptionApi';
+import { getProtectedData } from '../services/authApi';
 import { useNavigate } from 'react-router-dom';
 import SubscriptionCard from '../components/SubscriptionCard';
-import Header from '../components/Header'; // Import Header component
+import Header from '../components/Header';
 import styles from '../styles/SubscriptionCard.module.css';
+import AnnoyingCancelButton from '../components/AnnoyingCancelButton';
 
 const Subscription = () => {
     const [serverMessage, setServerMessage] = useState("");
     const [subscriptionTypes, setSubscriptionTypes] = useState([]);
+    const [userId, setUserId] = useState(null);
+    const [currentSubscription, setCurrentSubscription] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -19,26 +23,86 @@ const Subscription = () => {
             } catch (error) {
                 setServerMessage({
                     type: "error",
-                    text: "Failed to load subscription types."
+                    text: "Failed to load subscription types.",
+                    error: error.message
                 });
             }
         };
+
+        const fetchUser = async () => {
+            try {
+                const userData = await getProtectedData();
+                setUserId(userData.id);
+            } catch (error) {
+                console.error("User not logged in", error);
+            }
+        };
+
         loadSubscriptionTypes();
+        fetchUser();
     }, []);
 
-    const handleSubscribe = async (subscriptionId) => {
-        const dummyUserId = 1;
+    const handleSelectSubscription = async (subscriptionId) => {
+        if (!userId) {
+            setServerMessage({
+                type: "error",
+                text: "You must be logged in to subscribe."
+            });
+            return;
+        }
+        // If there's no active subscription, create one.
+        if (!currentSubscription) {
+            try {
+                const response = await createUserSubscription(subscriptionId, userId);
+                setServerMessage({
+                    type: "success",
+                    text: response.message
+                });
+                // Assume response includes subscriptions_type_id along with other subscription data
+                setCurrentSubscription(response);
+            } catch (error) {
+                setServerMessage({
+                    type: "error",
+                    text: error.response?.data?.error || "An error occurred"
+                });
+            }
+        } else {
+            // If the selected type is different from the current one, update.
+            if (currentSubscription.subscriptions_type_id !== subscriptionId) {
+                try {
+                    const response = await updateUserSubscription(subscriptionId, {
+                        date: new Date().toISOString(),
+                        subscriptions_type_id: subscriptionId,
+                        user_id: userId
+                    });
+                    setServerMessage({
+                        type: "success",
+                        text: response.message
+                    });
+                    setCurrentSubscription(response);
+                } catch (error) {
+                    setServerMessage({
+                        type: "error",
+                        text: error.response?.data?.error || "Update failed"
+                    });
+                }
+            }
+        }
+    };
+
+    const handleCancelSubscription = async () => {
+        if (!currentSubscription) return;
         try {
-            const response = await createUserSubscription(subscriptionId, dummyUserId);
+            const response = await deleteUserSubscription(currentSubscription.id);
             setServerMessage({
                 type: "success",
-                text: response.message
+                text: response.message || "Subscription cancelled successfully."
             });
-            navigate("/");
+            setCurrentSubscription(null);
         } catch (error) {
             setServerMessage({
                 type: "error",
-                text: error.response?.data?.error || "An error occurred"
+                text: error.response?.data?.error || "Failed to cancel subscription."
             });
         }
     };
@@ -46,15 +110,31 @@ const Subscription = () => {
     return (
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Header />
+            {userId && (
+                <div style={{ backgroundColor: '#f1f1f1', padding: '10px', textAlign: 'center' }}>
+                    Logged in as: {userId}
+                </div>
+            )}
             <main style={{ flex: '1', padding: '20px' }}>
                 <h2 style={{ textAlign: 'center' }}>Choose a subscription plan</h2>
                 {serverMessage && <p>{serverMessage.text}</p>}
+                {currentSubscription && (
+                    <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                        <h3>Your Current Subscription</h3>
+                        <AnnoyingCancelButton 
+                            onClick={handleCancelSubscription}
+                        >
+                            Cancel Subscription
+                        </AnnoyingCancelButton>
+                    </div>
+                )}
                 <div className={styles.container}>
                     {subscriptionTypes.map((type) => (
                         <SubscriptionCard
                             key={type.id}
                             subscription={type}
-                            onSubscribe={handleSubscribe}
+                            currentSubscription={currentSubscription}
+                            onSubscribe={handleSelectSubscription}
                         />
                     ))}
                 </div>
