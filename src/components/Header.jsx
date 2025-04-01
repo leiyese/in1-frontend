@@ -18,6 +18,7 @@ const Header = () => {
         setIsLoggedIn(true);
       } catch (error) {
         setIsLoggedIn(false);
+        console.log("Authentication error:", error);
       }
     };
     checkLoginStatus();
