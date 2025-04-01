@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: #f7f7f8;
 }
 
 .content {
@@ -14,42 +15,119 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #f7f7f8;
+  overflow: hidden;
+  position: relative;
 }
 
 .chatContainer {
   display: flex;
   flex-direction: column;
   height: 100%;
-  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .messagesWrapper {
   flex: 1;
   overflow-y: auto;
-  padding: 1rem;
-  padding-bottom: 150px; /* Space for prompt input */
+  padding: 1rem 0;
+  scroll-behavior: smooth;
 }
 
 .welcomeMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
   text-align: center;
-  margin-top: 2rem;
-  color: #6b7280;
+  color: #6e6e80;
+  padding: 2rem;
+}
+
+.welcomeMessage h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #000;
+}
+
+.welcomeMessage p {
+  font-size: 1rem;
+  margin-bottom: 2rem;
 }
 
 .promptWrapper {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 1rem;
-  background-color: #f7f7f8;
-  border-top: 1px solid #e5e7eb;
+  padding: 1rem 0 2rem;
+  position: relative;
+  width: 100%;
 }
 
 .disclaimer {
   text-align: center;
   font-size: 0.75rem;
-  color: #6b7280;
+  color: #6e6e80;
   margin-top: 0.5rem;
+}
+
+/* Message bubbles */
+.messageUser {
+  background-color: #f7f7f8;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #e5e5e6;
+}
+
+.messageAssistant {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #e5e5e6;
+}
+
+.messageContent {
+  white-space: pre-wrap;
+  line-height: 1.5;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Loading indicator */
+.loadingIndicator {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #e5e5e6;
+}
+
+.loadingDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #6e6e80;
+  margin: 0 2px;
+  animation: bounce 1.4s infinite ease-in-out;
+}
+
+.loadingDot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loadingDot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { 
+    transform: scale(0);
+  } 40% { 
+    transform: scale(1.0);
+  }
 }
