@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { login, logout } from '../services/authApi';
+import { login } from '../services/authApi';
 import { useNavigate } from "react-router-dom";
 import Header from '../components/Header';
 import Button from '../components/Button';
@@ -35,39 +35,32 @@ const Login = () => {
     const navMainMenu = () => {
         navigate("/");
     };
-    const handleProfileClick = () => {
-        navigate('/profile-page');
-        console.log('Profile clicked');
-    };
-
-    const handleSubcriptionClick = () => {
-        navigate('/subscription');
-        console.log('Subscription clicked');
-        const userId = localStorage.getItem('userId') || 'unknown'; 
-        console.log('Current user id:', userId);
-    }
-
-    
-    const handleLogoutClick = async () => {
-        try {
-        await logout();
-        console.log('Logout successful');
-        navigate('/login');
-        } catch (error) {
-        console.error('Logout failed:', error);
-        }
-    };
 
     return (
         <div>
-            <Header
-                onProfileClick={handleProfileClick} 
-                onLogoutClick={handleLogoutClick} 
-                onSubcriptionClick={handleSubcriptionClick}
-            />
-            <div className="container">
-                <h1>Login</h1>
-                <form onSubmit={handleSubmit(onSubmit)}>
+            <Header />
+            <div
+                className="container"
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: "80vh",
+                    textAlign: "center",
+                }}
+            >
+                <h1 style={{ marginBottom: "1rem" }}>Login</h1>
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        width: "100%",
+                        maxWidth: "400px",
+                    }}
+                >
                     <AdvTextInput
                         label="Username"
                         name="username"
@@ -82,7 +75,9 @@ const Login = () => {
                         {...register("password", { required: "Password is required" })}
                         error={errors.password}
                     />
-                    <Button type="submit">Login</Button>
+                    <div style={{ marginTop: "1rem" }}>
+                        <Button type="submit">Login</Button>
+                    </div>
                 </form>
                 {serverMessage && (
                     <div className={`message ${serverMessage.type}`}>

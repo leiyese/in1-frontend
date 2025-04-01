@@ -11,6 +11,7 @@ const Subscription = () => {
     const [serverMessage, setServerMessage] = useState("");
     const [subscriptionTypes, setSubscriptionTypes] = useState([]);
     const [userId, setUserId] = useState(null);
+    const [username, setUsername] = useState(null);
     const [currentSubscription, setCurrentSubscription] = useState(null);
     const navigate = useNavigate();
 
@@ -32,7 +33,8 @@ const Subscription = () => {
         const fetchUser = async () => {
             try {
                 const userData = await getProtectedData();
-                setUserId(userData.id);
+                setUserId(userData.logged_in_as);
+                setUsername(userData.username);
             } catch (error) {
                 console.error("User not logged in", error);
             }
@@ -112,7 +114,7 @@ const Subscription = () => {
             <Header />
             {userId && (
                 <div style={{ backgroundColor: '#f1f1f1', padding: '10px', textAlign: 'center' }}>
-                    Logged in as: {userId}
+                    Logged in as: {username}
                 </div>
             )}
             <main style={{ flex: '1', padding: '20px' }}>
