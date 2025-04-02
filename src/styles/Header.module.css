@@ -1,7 +1,8 @@
+/* Fix the header container to allow content to touch the edges */
 .header {
-  background: linear-gradient(to right, #e6f2fb, #eef7fd, #e6f2fb);
+  background: linear-gradient(to right, #ffffff, #ffffff, #d6e4ee, #71aeeb);
   color: #333;
-  padding: 0.8rem 2rem;
+  padding: 0.8rem 0; /* Remove horizontal padding */
   box-shadow: 0 2px 10px rgba(52, 152, 219, 0.07);
   display: flex;
   justify-content: space-between;
@@ -11,12 +12,13 @@
   top: 0;
   z-index: 100;
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  width: 100%;
 }
 
 /* Enhanced subtle animation when scrolling down */
 .header.scrolled {
   box-shadow: 0 3px 15px rgba(52, 152, 219, 0.12);
-  padding: 0.7rem 2rem;
+  padding: 0.7rem 0; /* Remove horizontal padding */
   background: rgba(234, 246, 253, 0.98);
   backdrop-filter: blur(10px);
   transform: translateY(-2px); /* Subtle upward shift when scrolled */
@@ -25,28 +27,36 @@
 .headerContainer {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 100%; /* Remove max-width constraint */
   width: 100%;
   justify-content: space-between; /* Modified: Create space between logo and buttons */
+  padding: 0; /* Remove any padding */
+  margin: 0; /* Remove any margin */
 }
 
+/* Update these logo-related properties */
+
+/* Update logo container to align with sidebar */
 .logoContainer {
   display: flex;
   align-items: center;
   position: relative;
+  width: var(--sidebar-width-desktop, 14rem); /* Match sidebar width */
+  padding: 0 0 0 1.5rem; /* Add left padding to move logo right */
+  margin: 0; /* Remove all margin */
+  justify-content: center; /* Center content horizontally */
 }
 
+/* Make the logo link area slightly larger to accommodate for cropping */
 .logoLink {
-  display: block;
+  display: flex;
   text-decoration: none;
   position: relative;
-  overflow: hidden;
-  border-radius: 8px;
-  cursor: pointer; /* Add cursor pointer to indicate clickability */
-  transition: transform 0.3s ease; /* Add transition for hover effect */
-  padding: 0.3rem;
+  overflow: hidden; 
+  border-radius: 16px; /* Increased from 14px */
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  padding: 0; /* Remove padding */
 }
 
 .logoLink:hover {
@@ -70,33 +80,47 @@
   left: 0;
 }
 
+/* Update these logo-related properties */
+
+/* Update logo wrapper for better alignment */
 .logoWrapper {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; /* Center the logo in its wrapper */
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden; /* Add this to clip the white edges */
+  border-radius: 16px; 
+  padding: 0; /* Remove padding */
+  background: transparent; /* Removed gradient background */
+  width: auto; /* Use auto width instead of 100% */
 }
 
+/* Remove the after pseudo-element with the radial gradient */
+.logoWrapper::after {
+  display: none; /* Hide the gradient overlay */
+}
+
+/* Update these logo-related properties */
+
+/* Update logo size and positioning */
 .logo {
-  height: 55px; /* Increased from 42px to make it larger */
+  height: 130px; /* Adjust size as needed */
   width: auto;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(52, 152, 219, 0.1);
+  border-radius: 10px;
   transition: all 0.4s ease;
   filter: drop-shadow(0 2px 3px rgba(52, 152, 219, 0.2));
+  transform: scale(1.05); /* Reduced scale since we're not hiding edges */
+  object-fit: cover;
+  object-position: center;
 }
 
+/* Update logoGlow to be consistent */
 .logoGlow {
   position: absolute;
   width: 120%;
   height: 120%;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(52, 152, 219, 0.25),
-    rgba(155, 89, 182, 0.1),
-    transparent 70%
-  );
+  background: transparent;
   filter: blur(8px);
   opacity: 0;
   transition: opacity 0.6s ease, transform 0.6s ease;
@@ -106,8 +130,42 @@
 
 /* Enhanced hover effect */
 .logoHovered .logo {
-  transform: scale(1.09) rotate(1deg);
+  transform: scale(1.08);
   box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
+.logoHovered .logoWrapper::after {
+  display: none;
+}
+
+.logoHovered .logoGlow {
+  opacity: 0.9;
+  transform: scale(1.4);
+  animation: pulsateGlow 2.5s infinite alternate;
+}
+
+/* Simplified glow effect */
+.logoGlow {
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  background: transparent; /* Removed gradient */
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  z-index: 1;
+  transform-origin: center;
+}
+
+/* Enhanced hover effect - simplified */
+.logoHovered .logo {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
+/* Remove the hover effect for the wrapper's after element */
+.logoHovered .logoWrapper::after {
+  display: none;
 }
 
 .logoHovered .logoGlow {
@@ -168,16 +226,25 @@
   align-items: center;
   gap: 2rem; /* Consistent spacing */
   margin-left: auto; /* Push everything to the right */
+  padding-right: 1rem; /* Add some padding on the right side */
 }
 
+/* Add this section for button styling in header */
 .buttonsContainer {
   display: flex;
-  gap: 1rem;
+  gap: 1.2rem; /* Increased spacing between buttons */
   align-items: center;
   position: relative;
 }
 
-/* User profile styling */
+/* Enhanced styling for header buttons */
+.buttonsContainer button {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* User profile styling - improved typography */
 .userProfile {
   display: flex;
   align-items: center;
@@ -194,6 +261,18 @@
   background-color: rgba(52, 152, 219, 0.08);
   border-color: rgba(52, 152, 219, 0.12);
   transform: translateY(-2px);
+}
+
+.userName {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #2c3e50;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+  letter-spacing: 0.01em; /* Slightly improved letter spacing */
 }
 
 .avatar {
@@ -321,7 +400,10 @@
   }
   
   .logoContainer {
-    margin-right: auto;
+    width: auto; /* Reset width on mobile */
+    margin-right: auto; /* Push other elements right */
+    padding-left: 1rem; /* Less padding on smaller screens */
+    justify-content: flex-start; /* Align to start on mobile */
   }
   
   .userProfile .userName {
@@ -336,14 +418,28 @@
   .mobileMenuIcon {
     display: block;
   }
+  
+  .buttonsSection {
+    gap: 1rem; /* Reduce gap on smaller screens */
+  }
 }
 
+/* Update mobile styles to keep logo larger on smaller screens */
 @media (max-width: 600px) {
   .buttonsContainer {
     gap: 0.5rem;
   }
   
   .logo {
-    height: 45px; /* Still larger than original on mobile */
+    height: 55px; /* Increased from 45px */
+  }
+  
+  .logoContainer {
+    width: auto; /* Ensure width is auto on very small screens */
+    padding-left: 0.5rem; /* Even less padding on very small screens */
+  }
+  
+  .buttonsSection {
+    gap: 0.5rem; /* Further reduce gap on very small screens */
   }
 }
