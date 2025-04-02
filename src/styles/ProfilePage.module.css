@@ -1,79 +1,141 @@
-/* src/pages/ProfilePage.module.css */
-
-.container {
+.profilePageLayout {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
     padding: 20px;
+    background-color: #f4f4f4;
 }
 
-.profileInfo {
-    margin-bottom: 20px;
-}
-
-.profileField {
-    margin-bottom: 10px;
-}
-
-.label {
-    font-weight: bold;
-    margin-right: 10px;
-}
-
-.value {
-    color: #555;
-}
-
-.editLink {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.editLink:hover {
-    text-decoration: underline;
-}
-
-.form {
+.formContainer {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 500px;
+    max-width: 450px;
+    text-align: center;
 }
 
-.formGroup {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
+.profile-title {
+    margin-bottom: 25px;
+    font-size: 2rem;
+    color: #333;
 }
 
-.formGroup label {
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.formGroup input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    width: 100%; /* Gör input-fälten full bredd */
-    box-sizing: border-box; /* Inkludera padding och border i input-fältets totala bredd */
-}
-
-.button {
+/* Knappstilar */
+.profile-button {
     background-color: #007bff;
     color: white;
-    padding: 10px 15px;
     border: none;
-    border-radius: 4px;
+    padding: 12px 20px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    margin: 5px;
+    display: inline-block;
+    width: auto;
 }
 
-.button:hover {
+.profile-button:hover {
     background-color: #0056b3;
 }
 
-/* Lägg till ytterligare styling för error om det behövs */
-.error {
-    color: red;
-    margin-bottom: 10px;
+.profile-button-secondary {
+    background-color: #6c757d;
+}
+
+.profile-button-secondary:hover {
+    background-color: #5a6268;
+}
+
+.profile-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Formulärstilar */
+.profile-data-view,
+.profile-form-edit {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.profile-field {
+    margin-bottom: 18px;
+}
+
+.profile-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.profile-value {
+    font-size: 1rem;
+    color: #333;
+    word-wrap: break-word;
+    padding: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+/* Input-stilar */
+.profile-form-edit label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.profile-form-edit input[type="text"],
+.profile-form-edit input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+/* Meddelanden */
+.serverMessage {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.serverMessage.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.serverMessage.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.loadingMessage {
+    color: #555;
+    font-style: italic;
+}
+
+/* Knappgruppering */
+.buttonGroup {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.linkButtonContainer {
+    margin-top: 20px;
+    text-align: center;
 }

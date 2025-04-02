@@ -1,167 +1,192 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-
-// Importerade komponenter
 import Button from '../components/Button';
 import LinkButton from '../components/LinkButton';
 import TextInput from '../components/TextInput';
-// Importera Header/Footer/SideBar här om de ska användas direkt i denna fil
-// import Header from '../components/Header';
-// import Footer from '../components/Footer';
-// import SideBar from '../components/SideBar';
-
-// Importerade services
-import { getProfile, updateProfile } from '../services/userApi'; // Använder cookie-baserad auth
-
-// Importerade stilar
+import { getProtectedData } from '../services/authApi';
+import { getProfile, updateProfile } from '../services/userApi';
 import styles from '../styles/ProfilePage.module.css';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, setValue, reset, formState: { errors }, } = useForm();
+  const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm();
   const [serverMessage, setServerMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // State för att visa laddningsindikator
+  const [isLoading, setIsLoading] = useState(true);
+  const [userId, setUserId] = useState(null);
+  const [profileData, setProfileData] = useState(null);
 
-  // --- Effekt för att hämta profildata vid sidladdning ---
   useEffect(() => {
-    setIsLoading(true); // Börja ladda
-    setServerMessage(""); // Rensa gamla meddelanden
-
-    const fetchProfile = async () => {
+    const fetchUserData = async () => {
       try {
-        // Anropa getProfile - förväntar sig att identifiera användaren via cookie
-        const profileData = await getProfile();
-
-        if (profileData) {
-          // Fyll i formuläret med hämtad data
-          // Viktigt: Se till att nycklarna i profileData matchar 'name' i TextInput
-          setValue('username', profileData.username || ''); // Sätt username
-          setValue('email', profileData.email || '');    // Sätt email
-          // Antag att profileData innehåller en läsbar prenumerationsstatus, t.ex. profileData.subscription_status eller profileData.subscription_name
-          // Anpassa 'profileData.subscription_status' till det faktiska fältnamnet från ditt API
-          setValue('subscription', profileData.subscription_status || 'No active subscription'); // Sätt prenumerationsstatus
-
-        } else {
-           setServerMessage({ type: "warning", text: "Profile data not found or empty." });
+        setIsLoading(true);
+        console.log("Fetching user data..."); // Debug-utskrift
+        const userData = await getProtectedData();
+        console.log("User data received:", userData); // Debug-utskrift
+        setUserId(userData.logged_in_as);
+        
+        if (userData.logged_in_as) {
+          console.log("Fetching profile data for user:", userData.logged_in_as); // Debug-utskrift
+          const profileData = await getProfile(userData.logged_in_as);
+          console.log("Profile data received:", profileData); // Debug-utskrift
+          if (profileData) {
+            setValue('username', profileData.username || '');
+            setValue('email', profileData.email || '');
+            setValue('subscription', profileData.subscription_status || 'No active subscription');
+            setProfileData(profileData);
+          }
         }
-
       } catch (error) {
-        console.error("ProfilePage: Failed to fetch profile:", error);
-        if (error.response?.status === 401 || error.response?.status === 403) {
-          setServerMessage({ type: "error", text: "You are not authorized to view this page. Please log in." });
-           // Omdirigera till login om användaren inte är auktoriserad
-           setTimeout(() => navigate('/login'), 2500);
+        console.error('Error fetching user data:', error);
+        if (error.response?.status === 401) {
+          // Om användaren inte är inloggad, omdirigera till inloggningssidan
+          navigate('/login');
         } else {
-          setServerMessage({ type: "error", text: error.response?.data?.error || "Failed to load profile!" });
+          setServerMessage({ type: "error", text: "Failed to load profile data" });
         }
       } finally {
-          setIsLoading(false); // Sluta ladda oavsett resultat
+        setIsLoading(false);
       }
     };
 
-    fetchProfile();
-
-    // Körs när setValue och navigate är redo.
+    fetchUserData();
   }, [setValue, navigate]);
 
-  // --- Funktion för att hantera formulärinskickning (uppdatering) ---
   const onSubmit = async (formData) => {
-     // Skicka endast de fält som faktiskt ska uppdateras (troligen bara username)
-     // Skapa ett nytt objekt med endast de redigerbara fälten
-     const updateData = {
-        username: formData.username
-        // Lägg till andra redigerbara fält här om det finns
-     };
-
     try {
-      // Anropa updateProfile med de data som ska ändras
-      const response = await updateProfile(updateData);
-      setServerMessage({ type: "success", text: response.message || "Profile updated successfully!" });
-      setIsEditing(false); // Stäng redigeringsläget
+      if (!formData.username || !formData.email) {
+        setServerMessage({ type: "error", text: "Both username and email are required" });
+        return;
+      }
 
-      // Återställ formuläret med de data som nu är sparade (från formData)
-      // Detta uppdaterar visningen om användarnamnet ändrades
-      reset(formData);
+      // Kontrollera om något faktiskt har ändrats
+      if (formData.username === profileData.username && formData.email === profileData.email) {
+        setServerMessage({ type: "info", text: "No changes detected" });
+        setIsEditing(false);
+        return;
+      }
 
-    } catch (error) {
-      console.error("ProfilePage: Failed to update profile:", error);
-       if (error.response?.status === 401 || error.response?.status === 403) {
-        setServerMessage({ type: "error", text: "Your session may have expired. Please log in again to update your profile." });
-        setTimeout(() => navigate('/login'), 2500);
+      const updateData = {
+        username: formData.username.trim(),
+        email: formData.email.trim()
+      };
+
+      console.log("Sending update data:", updateData);
+      console.log("User ID:", userId);
+
+      const response = await updateProfile(userId, updateData);
+      console.log("Update response:", response);
+      
+      if (response.Error) {
+        setServerMessage({ type: "error", text: response.Error });
       } else {
-        setServerMessage({ type: "error", text: error.response?.data?.error || "Failed to update profile!" });
+        setServerMessage({ type: "success", text: "Profile updated successfully!" });
+        setIsEditing(false);
+        reset(formData);
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      console.log("Error details:", {
+        status: error.response?.status,
+        data: error.response?.data,
+        headers: error.response?.headers
+      });
+      
+      const errorMessage = error.response?.data?.Error || "Failed to update profile";
+      
+      if (error.response?.status === 401) {
+        navigate('/login');
+      } else {
+        setServerMessage({ 
+          type: "error", 
+          text: errorMessage
+        });
       }
     }
   };
 
-  // --- Funktion för att avbryta redigering ---
-  const handleCancelEdit = () => {
-      setIsEditing(false);
-      // Återställ formuläret till de ursprungligen laddade värdena.
-      // reset() utan argument återställer till de värden som sattes med setValue i useEffect.
-      reset();
-      setServerMessage(""); // Rensa eventuella felmeddelanden från redigeringen
-  }
+  const handleEditClick = (e) => {
+    e.preventDefault(); // Förhindra standardbeteende
+    console.log("Edit button clicked, current isEditing state:", isEditing);
+    setIsEditing(true);
+    setServerMessage("");
+    console.log("New isEditing state:", true);
+  };
 
-  // --- JSX för att rendera sidan ---
+  const handleCancelEdit = (e) => {
+    e.preventDefault(); // Förhindra standardbeteende
+    console.log("Cancel button clicked");
+    setIsEditing(false);
+    reset();
+    setServerMessage("");
+  };
+
+  // Lägg till en useEffect för att övervaka isEditing
+  useEffect(() => {
+    console.log("isEditing state changed to:", isEditing);
+  }, [isEditing]);
+
+  // Lägg till en useEffect för att hantera formData
+  useEffect(() => {
+    if (profileData) {
+      reset({
+        username: profileData.username,
+        email: profileData.email
+      });
+    }
+  }, [profileData, reset]);
+
   return (
-    // Lägg till Header, Footer, SideBar och profilePageLayout-div här om de önskas
-    // <Header />
-    // <div className={styles.profilePageLayout}>
-    //   <SideBar onModelSelect={(id) => console.log("Model selected:", id)} />
-
+    <div className={styles.profilePageLayout}>
       <div className={styles.formContainer}>
         <h2>{isEditing ? "Edit Profile" : "View Profile"}</h2>
 
-        {/* Visa laddningsindikator */}
-        {isLoading && <p>Loading profile...</p>}
+        {isLoading && <p className={styles.loadingMessage}>Loading profile...</p>}
 
-        {/* Visa servermeddelande */}
-        {serverMessage && !isLoading && ( // Visa bara om inte laddar
-          <p
-            className={styles.serverMessage}
-            style={{ color: serverMessage.type === "success" ? "green" : serverMessage.type === "warning" ? "orange" : "red" }}
-          >
+        {serverMessage && !isLoading && (
+          <p className={`${styles.serverMessage} ${styles[serverMessage.type]}`}>
             {serverMessage.text}
           </p>
         )}
 
-        {/* Visa formuläret endast när laddning är klar och inga kritiska fel uppstått initialt */}
-        {!isLoading && !(serverMessage.type === "error" && serverMessage.text.includes("authorized")) && (
+        {!isLoading && (
           <form onSubmit={handleSubmit(onSubmit)}>
-            {/* Användarnamn (redigerbart) */}
             <TextInput
               name="username"
               label="Username"
               register={register}
               registerOptions={{ required: "Username is required" }}
               error={errors.username}
-              disabled={!isEditing} // Endast aktiv i redigeringsläge
-              autoComplete="username" // Hjälper webbläsare med autofyll
+              disabled={!isEditing}
+              autoComplete="username"
             />
-            {/* E-post (inte redigerbart) */}
+
             <TextInput
               name="email"
               label="Email"
               type="email"
               register={register}
-              // Ingen validering behövs om fältet är disabled
+              registerOptions={{ 
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address"
+                }
+              }}
               error={errors.email}
-              disabled={true} // Inte redigerbart
+              disabled={!isEditing}
               autoComplete="email"
             />
-            {/* Prenumeration (inte redigerbart) */}
+
             <TextInput
-              name="subscription" // Ska matcha nyckeln satt av setValue
-              label="Subscription Status" // Tydligare label
+              name="subscription"
+              label="Subscription Status"
               register={register}
               error={errors.subscription}
-              disabled={true} // Inte redigerbart
+              disabled={true}
             />
 
-            {/* Knappar */}
             <div className={styles.buttonGroup}>
               {isEditing ? (
                 <>
@@ -171,7 +196,7 @@ const ProfilePage = () => {
                   </Button>
                 </>
               ) : (
-                <Button type="button" onClick={() => setIsEditing(true)}>
+                <Button type="button" onClick={handleEditClick}>
                   Edit Profile
                 </Button>
               )}
@@ -179,14 +204,11 @@ const ProfilePage = () => {
           </form>
         )}
 
-         {/* Länk till huvudsida (visas alltid) */}
-         <div className={styles.linkButtonContainer}>
+        <div className={styles.linkButtonContainer}>
           <LinkButton to='/'>Main Menu</LinkButton>
         </div>
       </div>
-
-    // </div> // Stäng layout-div
-    // <Footer />
+    </div>
   );
 };
 

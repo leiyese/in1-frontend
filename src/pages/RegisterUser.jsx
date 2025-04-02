@@ -31,7 +31,7 @@ const RegisterUser = () => {
             console.log(data); // Log data in case of error to debug
             setServerMessage({
                 type: "error",
-                text: error.response?.data?.error || "Something went wrong!",
+                text: error.response?.data?.error || "Registration failed!",
             });
         }
     };
