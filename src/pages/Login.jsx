@@ -6,6 +6,7 @@ import Button from '../components/Button';
 import UserTextInput from '../components/UserTextInput';
 import Footer from '../components/Footer';
 import { login } from '../services/authApi';
+import { useLocation } from "react-router-dom";
 
 const Login = () => {
     const {
@@ -13,6 +14,9 @@ const Login = () => {
         handleSubmit,
         formState: { errors },
     } = useForm();
+
+    const location = useLocation(); // Access the state passed via navigate
+    const successMessage = location.state?.successMessage || ""; // Retrieve the success message
 
     const [serverMessage, setServerMessage] = useState("");
     const navigate = useNavigate();
@@ -45,6 +49,16 @@ const Login = () => {
                 }}
             >
                 <h1 style={{ marginBottom: "1rem" }}>Login</h1>
+                {successMessage && (
+                    <div
+                        style={{
+                            marginBottom: "1rem",
+                            color: "green", // Display the success message in green
+                        }}
+                    >
+                        {successMessage}
+                    </div>
+                )}
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     style={{
@@ -55,22 +69,22 @@ const Login = () => {
                         maxWidth: "400px",
                     }}
                 >
-                <UserTextInput
-                label="Username"
-                name="username"
-                type="text"
-                register={register}  // Pass register function here
-                registerOptions={{ required: "Username is required" }}
-                error={errors.username}
-                />
-                <UserTextInput
-                label="Password"
-                name="password"
-                type="password"
-                register={register}  // Pass register function here
-                registerOptions={{ required: "Password is required" }}
-                error={errors.password}
-                />
+                    <UserTextInput
+                        label="Username"
+                        name="username"
+                        type="text"
+                        register={register} // Pass register function here
+                        registerOptions={{ required: "Username is required" }}
+                        error={errors.username}
+                    />
+                    <UserTextInput
+                        label="Password"
+                        name="password"
+                        type="password"
+                        register={register} // Pass register function here
+                        registerOptions={{ required: "Password is required" }}
+                        error={errors.password}
+                    />
                     <div style={{ marginTop: "1rem" }}>
                         <Button type="submit">Login</Button>
                     </div>

@@ -28,7 +28,7 @@ const Header = () => {
     try {
       await logout(); // Call the API to log out
       setIsLoggedIn(false); // Update state
-      navigate('/login'); // Redirect to login page
+      navigate('/'); // Redirect to login page
     } catch (error) {
       console.error('Logout failed:', error);
     }

@@ -19,14 +19,16 @@ const RegisterUser = () => {
 
     const onSubmit = async (data) => {
         console.log("Register data:", data);
-        navigate('/login')  // Log the form data for debugging
 
         try {
-            const response = await registerUser(data);  // Call the API with the form data
+            const response = await registerUser(data); // Call the API with the form data
             setServerMessage({ type: "success", text: response.message });
-            reset();  // Reset the form fields
+            reset(); // Reset the form fields
+
+            // Navigate to the login page with a success message
+            navigate('/login', { state: { successMessage: "Registration successful! Please log in." } });
         } catch (error) {
-            console.log(data);  // Log data in case of error to debug
+            console.log(data); // Log data in case of error to debug
             setServerMessage({
                 type: "error",
                 text: error.response?.data?.error || "Something went wrong!",
@@ -74,6 +76,7 @@ const RegisterUser = () => {
                     <UserTextInput
                         name="password"
                         label="Password"
+                        type="password"
                         register={register}  // Pass register function here
                         registerOptions={{ required: "Password is required" }}  // Validation rule
                         error={errors.password}  // Display error message if there's any
