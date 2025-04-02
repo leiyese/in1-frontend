@@ -22,14 +22,15 @@ const RegisterUser = () => {
         navigate('/login')  // Log the form data for debugging
 
         try {
-            const response = await registerUser(data);  // Call the API with the form data
-            setServerMessage({ type: "success", text: response.message });
-            reset();  // Reset the form fields
+            const response = await registerUser(data);
+            setServerMessage({ type: "success", text: "Registration successful! Redirecting to login..." });
+            reset();
+            setTimeout(() => navigate('/login'), 2000);  // Vänta 2 sekunder innan omdirigering
         } catch (error) {
-            console.log(data);  // Log data in case of error to debug
+            console.error("Registration error:", error);
             setServerMessage({
                 type: "error",
-                text: error.response?.data?.error || "Something went wrong!",
+                text: error.response?.data?.error || "Registration failed!",
             });
         }
     };

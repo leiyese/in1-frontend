@@ -51,3 +51,18 @@ button.primary {
 button.primary:hover {
   background-color: #1d4ed8;
 }
+
+/* Responsiv design */
+@media (max-width: 768px) {
+  .headerContainer {
+    padding: 0 1rem;
+  }
+
+  .logo {
+    width: 90px; /* Mindre på mobila enheter */
+  }
+
+  .buttonsContainer {
+    gap: 0.5rem;
+  }
+}
