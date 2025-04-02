@@ -10,6 +10,11 @@ const SubscriptionCard = ({ subscription, onSubscribe, currentSubscription }) =>
             ? `Switch to ${subscription.type}`
             : "Subscribe";
 
+    const handleSubscribe = async (subscriptionId) => {
+        await onSubscribe(subscriptionId); // Call the provided onSubscribe function
+        window.location.reload(); // Reload the page to ensure the subscription ID is updated
+    };
+
     return (
         <div className={styles.card}>
             <div className={styles.content}>
@@ -18,7 +23,7 @@ const SubscriptionCard = ({ subscription, onSubscribe, currentSubscription }) =>
             </div>
             <button
                 className={styles.subscribeButton}
-                onClick={() => onSubscribe(subscription.id)}
+                onClick={() => handleSubscribe(subscription.id)}
                 disabled={isCurrent}
             >
                 {buttonText}

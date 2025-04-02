@@ -90,9 +90,9 @@ const Subscription = () => {
             console.error("No current subscription to cancel");
             return;
         }
-        
+
         console.log("Attempting to cancel subscription:", currentSubscription); // Debug log
-        
+
         // Make sure we have a valid subscription id
         if (!currentSubscription.id) {
             setServerMessage({
@@ -101,7 +101,7 @@ const Subscription = () => {
             });
             return;
         }
-        
+
         try {
             const response = await deleteUserSubscription(currentSubscription.id);
             console.log("Cancellation response:", response);
@@ -110,6 +110,7 @@ const Subscription = () => {
                 text: response.message || "Subscription cancelled successfully."
             });
             setCurrentSubscription(null);
+            window.location.reload(); // Reload the page to ensure the subscription ID is cleared
         } catch (error) {
             console.error("Error cancelling subscription:", error);
             setServerMessage({
