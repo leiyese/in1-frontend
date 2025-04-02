@@ -6,6 +6,7 @@ import LinkButton from '../components/LinkButton';
 import TextInput from '../components/TextInput';
 import { getProtectedData } from '../services/authApi';
 import { getProfile, updateProfile } from '../services/userApi';
+import { getUserSubscription, fetchSubscriptionTypes } from '../services/SubscriptionApi'; // Add this import
 import styles from '../styles/ProfilePage.module.css';
 
 const ProfilePage = () => {
@@ -16,6 +17,8 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState(null);
   const [profileData, setProfileData] = useState(null);
+  const [subscriptionData, setSubscriptionData] = useState(null); // Add this state
+  const [subscriptionTypes, setSubscriptionTypes] = useState([]); // Add this state
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -30,10 +33,36 @@ const ProfilePage = () => {
           console.log("Fetching profile data for user:", userData.logged_in_as); // Debug-utskrift
           const profileData = await getProfile(userData.logged_in_as);
           console.log("Profile data received:", profileData); // Debug-utskrift
+          
+          // Get subscription types first
+          const types = await fetchSubscriptionTypes();
+          setSubscriptionTypes(types.subscriptionTypes || types);
+          
+          // Then get user's subscription
+          try {
+            const subscription = await getUserSubscription(userData.logged_in_as);
+            setSubscriptionData(subscription);
+            console.log("User subscription data:", subscription);
+            
+            // Find the subscription type name
+            let subscriptionInfo = "No active subscription";
+            if (subscription) {
+              const subType = types.subscriptionTypes?.find(type => 
+                type.id === subscription.subscriptions_type_id
+              )?.type || 'Premium';
+              subscriptionInfo = `${subType} Plan`;
+            }
+            
+            setValue('subscriptionType', subscriptionInfo);
+          } catch (subError) {
+            console.log("No subscription found or error:", subError);
+            setValue('subscriptionType', "No active subscription");
+          }
+          
           if (profileData) {
             setValue('username', profileData.username || '');
             setValue('email', profileData.email || '');
-            setValue('subscription', profileData.subscription_status || 'No active subscription');
+            setValue('subscription', profileData.subscription_id || 'No active subscription');
             setProfileData(profileData);
           }
         }
@@ -179,13 +208,26 @@ const ProfilePage = () => {
               autoComplete="email"
             />
 
-            <TextInput
-              name="subscription"
-              label="Subscription Status"
-              register={register}
-              error={errors.subscription}
-              disabled={true}
-            />
+            {/* Updated subscription field with better display and manage button */}
+            <div className={styles.subscriptionField}>
+              <TextInput
+                name="subscriptionType"
+                label="Subscription Status"
+                register={register}
+                error={errors.subscriptionType}
+                disabled={true}
+              />
+              
+              {/* Add a button to manage subscription */}
+              <Button 
+                type="button" 
+                variant="secondary"
+                onClick={() => navigate('/subscription')}
+                className={styles.manageSubscriptionBtn}
+              >
+                {subscriptionData ? "Manage Plan" : "Get Subscription"}
+              </Button>
+            </div>
 
             <div className={styles.buttonGroup}>
               {isEditing ? (
