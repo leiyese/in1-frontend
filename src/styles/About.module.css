@@ -9,7 +9,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url('/hero-bg.jpg');
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.8) 0%, rgba(155, 89, 182, 0.8) 100%),
+              url('../assets/group_photo_3.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -30,7 +31,7 @@
   font-size: 5rem;
   font-weight: 900;
   margin-bottom: 1rem;
-  background: linear-gradient(90deg, #3498db, #2ecc71, #9b59b6);
+  background: linear-gradient(90deg, #76cdf8, #ecf1ee, #5e9df0);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -82,51 +83,78 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 2rem; /* Reduced horizontal padding */
+  position: relative;
 }
 
 /* Section Styles */
 .visionSection,
-.timelineSection,
+.challengeSection,
+.solutionSection,
 .teamSection,
 .featureSection {
   padding: 6rem 0;
 }
 
+/* Vision Section */
 .visionSection {
-  background-color: #f9f9f9;
+  background-color: #ffffff;
+  position: relative;
+  padding: 5rem 0; /* Slightly reduced padding */
+  overflow: visible;
+}
+
+.visionSection::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(52, 152, 219, 0.3), transparent);
+}
+
+.visionSection::before {
+  content: ''; 
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 20px;
+  height: 50px;
+  background-color: rgba(52, 152, 219, 0.1);
+  border-radius: 0 25px 25px 0;
 }
 
 .visionContent {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 3rem; /* Increased gap for better separation */
   align-items: center;
+  margin-bottom: 2rem;
+  position: relative;
 }
 
 .visionImage {
   flex: 1;
   min-width: 300px;
-}
-
-.imageWrapper {
-  width: 100%;
-  height: 300px;
-  background-color: #3498db;
-  border-radius: 20px;
+  height: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  background-image: url('../assets/group_photo_2.jpg');
+  background-size: cover;
+  background-position: center;
+  order: -1; /* Place image on the left */
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 5px solid #3498db; /* Blue accent for vision */
 }
 
-.glowEffect {
-  position: absolute;
-  width: 150%;
-  height: 150%;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  top: -25%;
-  left: -25%;
-  animation: glowSweep 3s linear infinite;
+.visionImage:hover {
+  transform: scale(1.02); /* Subtle growth on hover */
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25); /* Enhanced shadow on hover */
 }
 
 .visionText {
@@ -135,74 +163,176 @@
 }
 
 .visionText p {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   line-height: 1.8;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
+  color: #2c3e50;
+  text-align: justify; /* Better text alignment */
 }
 
-/* Timeline */
-.timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin: 3rem 0;
+/* Challenge Section */
+.challengeSection {
+  background-color: #f9f9f9;
   position: relative;
+  padding: 5rem 0; /* Slightly reduced padding */
+  overflow: visible;
 }
 
-.timeline::before {
+.challengeSection::after {
   content: '';
   position: absolute;
-  left: 50px;
-  top: 0;
   bottom: 0;
-  width: 2px;
-  background-color: #3498db;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(52, 152, 219, 0.3), transparent);
 }
 
-.timelineItem {
+.challengeSection::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 20px;
+  height: 50px;
+  background-color: rgba(231, 76, 60, 0.1);
+  border-radius: 25px 0 0 25px;
+}
+
+.challengeContent {
   display: flex;
-  cursor: pointer;
-  padding: 1rem;
-  border-radius: 8px;
-  background-color: white;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s, box-shadow 0.3s;
+  flex-wrap: wrap;
+  gap: 3rem; /* Increased gap for better separation */
+  align-items: center;
+  margin-bottom: 2rem;
   position: relative;
-  z-index: 1;
 }
 
-.timelineItem:hover {
-  transform: translateX(10px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+.challengeVisual {
+  flex: 1;
+  min-width: 300px;
+  height: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  background-image: url('../assets/group_photo_3.jpg');
+  background-size: cover;
+  background-position: center;
+  order: 2; /* Place image on the right */
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-right: 5px solid #3498db; /* Red accent for challenge */
 }
 
-.timelineItem.expanded {
-  background-color: #f0f8ff;
+.challengeVisual:hover {
+  transform: scale(1.02); /* Subtle growth on hover */
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25); /* Enhanced shadow on hover */
 }
 
-.timelineYear {
-  min-width: 100px;
-  font-weight: bold;
+.challengeContent p {
+  flex: 2;
+  min-width: 300px;
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #2c3e50;
+  margin-bottom: 1.2rem;
+  text-align: justify; /* Better text alignment */
+}
+
+/* Solution Section */
+.solutionSection {
+  background-color: #ffffff;
+  position: relative;
+  padding: 5rem 0; /* Slightly reduced padding */
+  overflow: visible;
+}
+
+.solutionSection::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 20px;
+  height: 50px;
+  background-color: rgba(46, 204, 113, 0.1);
+  border-radius: 0 25px 25px 0;
+}
+
+.solutionContent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem; /* Increased gap for better separation */
+  align-items: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.solutionVisual {
+  flex: 1;
+  min-width: 300px;
+  height: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  background-image: url('../assets/group_photo_4.jpg');
+  background-size: cover;
+  background-position: center;
+  order: -1; /* Place image on the left */
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 5px solid #3498db; /* Green accent for solution */
+}
+
+.solutionVisual:hover {
+  transform: scale(1.02); /* Subtle growth on hover */
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25); /* Enhanced shadow on hover */
+}
+
+.solutionContent p {
+  flex: 2;
+  min-width: 300px;
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #2c3e50;
+  margin-bottom: 1.2rem;
+  text-align: justify; /* Better text alignment */
+}
+
+.benefitsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.benefitItem {
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.benefitItem:hover {
+  transform: translateY(-5px);
+}
+
+.benefitItem span {
   font-size: 1.5rem;
+  margin-right: 1rem;
   color: #3498db;
 }
 
-.timelineContent h3 {
-  margin-top: 0;
-}
-
-.timelineContent p {
-  margin-bottom: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s ease;
-}
-
-.timelineItem.expanded .timelineContent p {
-  max-height: 200px;
-}
-
 /* Team Section */
+.teamSection {
+  background-color: #f9f9f9;
+}
+
 .teamGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -212,7 +342,7 @@
 
 .teamCard {
   perspective: 1000px;
-  height: 300px;
+  height: 350px;
 }
 
 .teamCardInner {
@@ -254,12 +384,30 @@
   justify-content: space-between;
 }
 
-.teamImagePlaceholder {
+.teamImage {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background-color: #e0e0e0;
+  background-size: cover;
+  background-position: center;
   margin-bottom: 1rem;
+  border: 3px solid #3498db;
+}
+
+.teamCardFront h3 {
+  margin: 0.5rem 0;
+  color: #2c3e50;
+}
+
+.teamCardFront p {
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.teamCardBack p {
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 .socialLinks {
@@ -379,6 +527,97 @@
 .secondaryButton:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Subtle image caption styling */
+.imageCaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  color: #2c3e50;
+  text-align: center;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  border-top: 1px solid rgba(52, 152, 219, 0.3);
+  backdrop-filter: blur(1px);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.visionImage:hover .imageCaption,
+.challengeVisual:hover .imageCaption,
+.solutionVisual:hover .imageCaption {
+  transform: translateY(0);
+}
+
+
+/* Enhanced section headings */
+.visionSection h2, .challengeSection h2, .solutionSection h2, 
+.teamSection h2, .featureSection h2 {
+  text-align: center;
+  margin-bottom: 3rem; /* Increased margin */
+  font-size: 2.5rem;
+  font-weight: 800;
+  position: relative;
+  padding-bottom: 1rem; /* Space for decorator */
+  color: #2c3e50;
+}
+
+/* Add decorative underline to connect heading with content */
+.visionSection h2::after, .challengeSection h2::after, .solutionSection h2::after,
+.teamSection h2::after, .featureSection h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(to right, #3498db, #9b59b6);
+  border-radius: 2px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 992px) {
+  .visionContent, .challengeContent, .solutionContent {
+    flex-direction: column !important;
+    gap: 2rem;
+  }
+  
+  .visionImage, .challengeVisual, .solutionVisual, 
+  .visionText, .challengeContent p, .solutionContent p {
+    order: 0;
+    width: 100%;
+  }
+  
+  .title {
+    font-size: 3.5rem;
+  }
+  
+  .subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .benefitsList {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .title {
+    font-size: 2.5rem;
+  }
+  
+  .teamGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .heroSection {
+    background-attachment: scroll;
+  }
 }
 
 /* Animations */

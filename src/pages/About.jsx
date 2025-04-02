@@ -4,12 +4,17 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import styles from '../styles/About.module.css';
 
+// Import team member images
+import antonImage from '../assets/anton.jpg';
+import pirozImage from '../assets/piroz.jfif';
+import albinImage from '../assets/albin.jfif';
+import leiImage from '../assets/lei.jpg';
+
 const About = () => {
-  const navigate = useNavigate();
-  const parallaxRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
-  
-  // Animate on scroll
+  const parallaxRef = useRef(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const handleScroll = () => {
       const position = window.scrollY;
@@ -33,18 +38,6 @@ const About = () => {
     };
   }, []);
 
-  // Interactive timeline item click handler
-  const handleTimelineClick = (index) => {
-    const timelineItems = document.querySelectorAll(`.${styles.timelineItem}`);
-    timelineItems.forEach((item, i) => {
-      if (i === index) {
-        item.classList.toggle(styles.expanded);
-      } else {
-        item.classList.remove(styles.expanded);
-      }
-    });
-  };
-
   return (
     <div className={styles.aboutPage}>
       <Header />
@@ -56,8 +49,8 @@ const About = () => {
         style={{ backgroundPositionY: `${scrollPosition * 0.5}px` }}
       >
         <div className={styles.heroContent}>
-          <h1 className={styles.title}>Our Story</h1>
-          <p className={styles.subtitle}>Creating the future of AI interaction</p>
+          <h1 className={styles.title}>About Us</h1>
+          <p className={styles.subtitle}>Unifying AI power for everyone</p>
         </div>
         <div className={styles.scrollIndicator}>
           <span>Scroll to explore</span>
@@ -71,65 +64,106 @@ const About = () => {
           <h2>Our Vision</h2>
           <div className={styles.visionContent}>
             <div className={styles.visionImage}>
-              <div className={styles.imageWrapper}>
-                <div className={styles.glowEffect}></div>
-              </div>
+              <span className={styles.imageCaption}>Team ideation session</span>
             </div>
             <div className={styles.visionText}>
-              <p>In1 was born from a simple idea: make artificial intelligence accessible to everyone while maintaining the highest level of performance and reliability.</p>
-              <p>We believe AI should be intuitive, powerful, and seamlessly integrated into everyday life. Our platform brings together cutting-edge models in a user-friendly interface that adapts to your needs.</p>
+              <p>At In-1, we are driven by a fundamental belief: the power of Artificial Intelligence should be accessible, manageable, and impactful for everyone. We are living in a new technological dawn, where AI is rapidly becoming the most potent tool humanity has ever created, promising to reshape industries and enhance our capabilities in unprecedented ways.</p>
+              <p>Our platform is designed for the modern workplace – from small businesses to large enterprises and public sector organizations. By providing employees with seamless access to cutting-edge AI capabilities through one integrated solution, we empower organizations to streamline workflows, boost efficiency, drive innovation, and optimize costs.</p>
             </div>
           </div>
         </div>
       </section>
       
-      {/* Interactive timeline */}
-      <section className={`${styles.timelineSection} ${styles.fadeIn}`}>
+      {/* Challenge section */}
+      <section className={`${styles.challengeSection} ${styles.fadeIn}`}>
         <div className={styles.container}>
-          <h2>Our Journey</h2>
-          <div className={styles.timeline}>
-            {[
-              { year: '2022', title: 'The Beginning', content: 'Our journey began in a small apartment with a team of three developers sharing a vision for more accessible AI.' },
-              { year: '2023', title: 'First Prototype', content: 'After months of development, we launched our first prototype, receiving enthusiastic feedback from early adopters.' },
-              { year: '2024', title: 'Growing Community', content: 'Our user base expanded rapidly as we introduced new models and subscription options to meet diverse needs.' },
-              { year: '2025', title: 'The Future', content: 'We continue to push boundaries, with exciting developments in multimodal AI and custom model training on the horizon.' }
-            ].map((item, index) => (
-              <div 
-                key={index} 
-                className={styles.timelineItem}
-                onClick={() => handleTimelineClick(index)}
-              >
-                <div className={styles.timelineYear}>{item.year}</div>
-                <div className={styles.timelineContent}>
-                  <h3>{item.title}</h3>
-                  <p>{item.content}</p>
-                </div>
-              </div>
-            ))}
+          <h2>The Challenge in the Age of AI</h2>
+          <div className={styles.challengeContent}>
+            <p>
+              The AI landscape is exploding with innovation. Specialized models excel at specific tasks – generating stunning visuals, composing intricate text, editing audio with precision, or performing complex data analysis. However, harnessing the best of these tools often means navigating a fragmented market, managing multiple subscriptions with varying and often significant costs (from hundreds to thousands per year or even month per tool), and dealing with the complexity of integrating disparate systems. This creates a barrier, particularly for businesses and organizations aiming to leverage AI comprehensively without breaking the bank or overwhelming their teams.
+            </p>
+            <div className={styles.challengeVisual}>
+              <span className={styles.imageCaption}>Collaborative problem solving</span>
+            </div>
           </div>
         </div>
       </section>
       
-      {/* Team section with animated cards */}
+      {/* Solution section */}
+      <section className={`${styles.solutionSection} ${styles.fadeIn}`}>
+        <div className={styles.container}>
+          <h2>Our Solution: A Unified AI Powerhouse</h2>
+          <div className={styles.solutionContent}>
+            <div className={styles.solutionVisual}>
+              <span className={styles.imageCaption}>Building the future together</span>
+            </div>
+            <p>
+              In-1 was founded to solve this challenge. We are developing a comprehensive, full-stack, all-in-one platform that aggregates a curated selection of leading AI models. Our core offering simplifies AI adoption: through a single, streamlined subscription, our clients gain access to a powerful suite of diverse, best-in-class AI tools. We aim to offer clear, potentially flexible pricing tiers based on usage needs, ensuring that professional-grade AI is within reach.
+            </p>
+          </div>
+          <div className={styles.benefitsList}>
+            <div className={styles.benefitItem}>
+              <span>✓</span> Streamline Workflows: Integrate AI seamlessly into daily tasks.
+            </div>
+            <div className={styles.benefitItem}>
+              <span>✓</span> Boost Efficiency: Automate repetitive processes and accelerate project completion.
+            </div>
+            <div className={styles.benefitItem}>
+              <span>✓</span> Drive Innovation: Unlock new creative and analytical possibilities.
+            </div>
+            <div className={styles.benefitItem}>
+              <span>✓</span> Optimize Costs: Access multiple premium AI models through one predictable cost structure.
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Team section with real team members */}
       <section className={`${styles.teamSection} ${styles.fadeIn}`}>
         <div className={styles.container}>
-          <h2>Meet Our Team</h2>
+          <h2>Meet the Team</h2>
+          <p style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            The vision for In-1 is brought to life by a team of passionate technologists and innovators
+          </p>
           <div className={styles.teamGrid}>
             {[
-              { name: 'Alexandra Chen', role: 'Founder & CEO', image: '/team1.jpg' },
-              { name: 'Marcus Johnson', role: 'CTO', image: '/team2.jpg' },
-              { name: 'Sofia Rodriguez', role: 'Lead AI Researcher', image: '/team3.jpg' },
-              { name: 'David Kim', role: 'UX Designer', image: '/team4.jpg' }
+              { 
+                name: 'Piroz Kianersi', 
+                role: 'Lead Innovator', 
+                image: pirozImage,
+                description: 'A visionary thinker with an exceptional aptitude for programming and out-of-the-box problem-solving. Piroz drives our core innovation.'
+              },
+              { 
+                name: 'Albin Cronmark', 
+                role: 'Integration Specialist', 
+                image: albinImage,
+                description: 'A master of programming logic, with deep expertise in Python and the intricacies of API integration, ensuring our platform is robust and interconnected.'
+              },
+              { 
+                name: 'Lei Ye', 
+                role: 'Development Navigator', 
+                image: leiImage,
+                description: 'The essential navigator guiding our development efforts; a brilliant programmer ensuring we stay on course and deliver exceptional software.'
+              },
+              { 
+                name: 'Anton Ernstsson', 
+                role: 'Database & UX Architect', 
+                image: antonImage,
+                description: 'A master of database architecture and user-centric design, focusing on creating a platform that is not only powerful but also intuitive and reliable.'
+              }
             ].map((member, index) => (
               <div key={index} className={styles.teamCard}>
                 <div className={styles.teamCardInner}>
                   <div className={styles.teamCardFront}>
-                    <div className={styles.teamImagePlaceholder}></div>
+                    <div 
+                      className={styles.teamImage} 
+                      style={{ backgroundImage: `url(${member.image})` }}
+                    ></div>
                     <h3>{member.name}</h3>
                     <p>{member.role}</p>
                   </div>
                   <div className={styles.teamCardBack}>
-                    <p>Passionate about creating technology that enhances human capability and creativity.</p>
+                    <p>{member.description}</p>
                     <div className={styles.socialLinks}>
                       <span>🔗</span>
                       <span>📧</span>
@@ -142,7 +176,7 @@ const About = () => {
         </div>
       </section>
       
-      {/* Interactive feature section */}
+      {/* Feature section */}
       <section className={`${styles.featureSection} ${styles.fadeIn}`}>
         <div className={styles.container}>
           <h2>What Makes Us Different</h2>
