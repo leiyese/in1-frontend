@@ -51,12 +51,15 @@
 
 /* Messages area grows to fill vertical space */
 .messagesWrapper {
+  margin-top: 80px;
   flex: 1;
   overflow-y: auto; /* This enables vertical scrolling */
   padding: 1rem 0;
   scroll-behavior: smooth;
   height: 0; /* Important for flex scrolling to work */
   min-height: 0; /* Fixes flexbox scrolling issue */
+  
+  
 }
 
 /* Prompt area is always pushed to the bottom */
