@@ -38,24 +38,25 @@
   flex-shrink: 0; /* Prevent the footer from shrinking */
 }
 
-/* Chat container takes all available vertical space in main */
 .chatContainer {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  height: 100%; /* Takes full height of parent */
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
   padding: 0 1rem;
+  min-height: 0; /* Crucial for nested flex scrolling */
 }
 
 /* Messages area grows to fill vertical space */
 .messagesWrapper {
   flex: 1;
-  width: 100%;
-  overflow-y: auto;
+  overflow-y: auto; /* This enables vertical scrolling */
   padding: 1rem 0;
   scroll-behavior: smooth;
+  height: 0; /* Important for flex scrolling to work */
+  min-height: 0; /* Fixes flexbox scrolling issue */
 }
 
 /* Prompt area is always pushed to the bottom */
