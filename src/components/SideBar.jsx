@@ -39,6 +39,10 @@ const SideBar = ({ onModelSelect }) => {
           </li>
         ))}
       </ul>
+      
+      <div className={styles.sidebarFooter}>
+        Powered by In1 AI Technology
+      </div>
     </aside>
   );
 };

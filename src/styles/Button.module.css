@@ -1,25 +1,209 @@
 .button {
+  padding: 0.6rem 1.2rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.01em;
+  border-radius: 0.375rem;
+  background: transparent; /* Default transparent background */
+  border: none; /* No border by default */
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+/* Nav style - minimal with underline effect */
+.nav {
+  background: transparent;
+  color: #5a6577;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  box-shadow: none;
+  position: relative;
+}
+
+.nav::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(90deg, #3498db, #9b59b6);
+  transition: width 0.3s ease;
+  transform-origin: left;
+}
+
+.nav:hover {
+  color: #3498db;
+  transform: translateY(-2px);
+}
+
+.nav:hover::after {
+  width: 100%;
+}
+
+.navActive {
+  color: #3498db;
+  font-weight: 600;
+}
+
+.navActive::after {
+  width: 100%;
+}
+
+/* Primary button - for "Login" and "Register" */
+.primary {
+  background: transparent;
+  color: #3498db;
+  border: 1px solid #3498db;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+}
+
+.primary:hover {
+  background-color: rgba(52, 152, 219, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Danger button - for "Logout" */
+.danger {
+  background: transparent;
+  color: #e74c3c;
+  border: 1px solid #e74c3c;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+}
+
+.danger:hover {
+  background-color: rgba(231, 76, 60, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Secondary button - subtle, outlined */
+.secondary {
+  background: transparent;
+  color: #3498db;
+  border: 1px solid #3498db;
+}
+
+.secondary:hover {
+  background-color: rgba(52, 152, 219, 0.08);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Success button - green gradient */
+.success {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: white;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.success:hover {
+  background: linear-gradient(135deg, #27ae60, #219955);
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Text button - no background */
+.text {
+  background: transparent;
+  color: #3498db;
+  box-shadow: none;
+  padding: 0.4rem 0.8rem;
+  border: none;
+}
+
+.text:hover {
+  background-color: rgba(52, 152, 219, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Disabled state */
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Size variations */
+.small {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.large {
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
+}
+
+/* Full width variation */
+.fullWidth {
+  width: 100%;
+}
+
+/* Shine effect on hover for primary, danger and success buttons */
+.primary::after,
+.danger::after,
+.success::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.primary:hover::after,
+.danger:hover::after,
+.success:hover::after {
+  opacity: 1;
+  animation: shine 1.5s ease-in-out;
+}
+
+@keyframes shine {
+  0% {
+    left: -100%;
+    opacity: 0.7;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .button {
     padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    font-weight: 500;
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
+    font-size: 0.9rem;
   }
   
-  .primary {
-    background-color: #2563eb;
-    color: white;
+  .large {
+    padding: 0.7rem 1.3rem;
+    font-size: 1rem;
   }
   
-  .primary:hover {
-    background-color: #1d4ed8;
+  .nav {
+    padding: 0.4rem 0.6rem;
   }
-  
-  .danger {
-    background-color: #dc2626;
-    color: white;
-  }
-  
-  .danger:hover {
-    background-color: #b91c1c;
-  }
+}
