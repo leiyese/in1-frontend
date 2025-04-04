@@ -5,7 +5,7 @@ import ProfilePage from "./pages/ProfilePage";
 import RegisterUser from "./pages/RegisterUser";
 import Subscription from "./pages/Subscription";
 import UserInfoPage from "./pages/UserExample";
-import About from "./pages/About"; // Import the new About page
+import About from "./pages/About"; 
 
 function App() {
 
@@ -19,7 +19,7 @@ function App() {
           <Route path="/" element={<Index />} />
           <Route path = "/subscription" element={<Subscription />} />
           <Route path = "/profile-page" element={<ProfilePage />} />        
-          <Route path="/about" element={<About />} /> {/* Add the new route */}
+          <Route path="/about" element={<About />} /> 
         </Routes>
       </Router>
     </>
