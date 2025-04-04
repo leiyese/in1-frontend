@@ -1,0 +1,28 @@
+{
+  "subscriptionTypes": [
+    {
+      "id": 1,
+      "type": "Basic",
+      "price": 9.99,
+      "credits": 100,
+      "description": "Essential AI features for casual users",
+      "features": ["Basic AI models", "Limited chats", "Standard processing"]
+    },
+    {
+      "id": 2,
+      "type": "Professional",
+      "price": 19.99,
+      "credits": 300,
+      "description": "Advanced features for professionals",
+      "features": ["Advanced models including GPT-4", "Unlimited chats", "Priority processing"]
+    },
+    {
+      "id": 3,
+      "type": "Enterprise",
+      "price": 49.99,
+      "credits": 1000,
+      "description": "Complete solution for businesses",
+      "features": ["All premium models", "Unlimited usage", "Highest priority", "Advanced privacy"]
+    }
+  ]
+}

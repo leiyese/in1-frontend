@@ -66,17 +66,35 @@ const Subscription = () => {
                 setUserId(userData.logged_in_as);
                 setUsername(userData.username);
                 
+                // Improved error handling for user subscription
                 try {
                     const userSubscription = await getUserSubscription(userData.logged_in_as);
                     if (userSubscription) {
                         setCurrentSubscription(userSubscription);
                         const activePlanId = userSubscription.subscriptions_type_id;
                         setSelectedPlan(activePlanId);
+                    } else {
+                        // User doesn't have a subscription yet - this is normal
+                        setCurrentSubscription(null);
+                        setSelectedPlan(null);
+                        console.log("User has no active subscription");
                     }
                 } catch (err) {
-                    console.error("Error fetching user subscription:", err);
+                    // Only show error for non-404 errors
+                    if (err.response && err.response.status !== 404) {
+                        console.error("Error fetching user subscription:", err);
+                        setServerMessage({
+                            type: "error",
+                            text: "Error loading subscription data"
+                        });
+                    } else {
+                        // 404 is normal for users without subscriptions
+                        setCurrentSubscription(null);
+                        setSelectedPlan(null);
+                    }
                 }
             } catch (error) {
+                // Auth error handling remains the same
                 setServerMessage({
                     type: "warning",
                     text: "Please log in to manage subscriptions"
@@ -88,54 +106,63 @@ const Subscription = () => {
         fetchUser();
     }, []);
 
-    const handleSelectSubscription = async (subscriptionId) => {
-        if (!userId) {
-            setServerMessage({
-                type: "error",
-                text: "Please log in to subscribe"
-            });
-            setTimeout(() => {
-                navigate('/login');
-            }, 2000);
-            return;
-        }
+    // Update your handleSelectSubscription function
+
+const handleSelectSubscription = async (subscriptionId) => {
+    if (!userId) {
+        setServerMessage({
+            type: "error",
+            text: "Please log in to subscribe"
+        });
+        setTimeout(() => {
+            navigate('/login');
+        }, 2000);
+        return;
+    }
+    
+    try {
+        setServerMessage({
+            type: "loading",
+            text: "Processing your subscription..."
+        });
         
-        try {
-            setServerMessage({
-                type: "loading",
-                text: "Processing your subscription..."
-            });
-            
-            const response = await createUserSubscription(subscriptionId, userId);
-            
-            setServerMessage({
-                type: "success",
-                text: "Subscription updated successfully!"
-            });
-            
-            setCurrentSubscription(response);
-            setSelectedPlan(subscriptionId);
-            
-            // Clear success message after 3 seconds
-            setTimeout(() => {
-                setServerMessage(null);
-            }, 3000);
-            
-        } catch (error) {
-            setServerMessage({
-                type: "error",
-                text: error.response?.data?.error || "There was a problem with your subscription"
-            });
-        }
-    };
+        const response = await createUserSubscription(subscriptionId, userId);
+        
+        // After creating subscription, fetch the complete subscription data
+        // This ensures we have the ID needed for cancellation
+        const fullSubscriptionData = await getUserSubscription(userId);
+        
+        setServerMessage({
+            type: "success",
+            text: "Subscription updated successfully!"
+        });
+        
+        // Set the complete subscription data
+        setCurrentSubscription(fullSubscriptionData);
+        setSelectedPlan(subscriptionId);
+        
+        // Clear success message after 3 seconds
+        setTimeout(() => {
+            setServerMessage(null);
+        }, 3000);
+        
+    } catch (error) {
+        setServerMessage({
+            type: "error",
+            text: error.response?.data?.error || "There was a problem with your subscription"
+        });
+    }
+};
 
     const handleCancelSubscription = async () => {
         if (!currentSubscription) {
             console.error("No current subscription to cancel");
+            setServerMessage({
+                type: "error",
+                text: "No active subscription found"
+            });
             return;
         }
-
-        console.log("Attempting to cancel subscription:", currentSubscription); // Debug log
 
         // Make sure we have a valid subscription id
         if (!currentSubscription.id) {
@@ -147,14 +174,27 @@ const Subscription = () => {
         }
 
         try {
+            setServerMessage({
+                type: "loading",
+                text: "Cancelling your subscription..."
+            });
+            
             const response = await deleteUserSubscription(currentSubscription.id);
             console.log("Cancellation response:", response);
+            
+            // Update state directly instead of reloading the page
+            setCurrentSubscription(null);
+            setSelectedPlan(null);
+            
             setServerMessage({
                 type: "success",
                 text: response.message || "Subscription cancelled successfully."
             });
-            setCurrentSubscription(null);
-            window.location.reload(); // Reload the page to ensure the subscription ID is cleared
+            
+            // Clear success message after a few seconds
+            setTimeout(() => {
+                setServerMessage(null);
+            }, 3000);
         } catch (error) {
             console.error("Error cancelling subscription:", error);
             setServerMessage({

@@ -12,7 +12,8 @@ const SubscriptionCard = ({ subscription, onSubscribe, currentSubscription }) =>
 
     const handleSubscribe = async (subscriptionId) => {
         await onSubscribe(subscriptionId); // Call the provided onSubscribe function
-        window.location.reload(); // Reload the page to ensure the subscription ID is updated
+        // Remove this line:
+        // window.location.reload();
     };
 
     return (

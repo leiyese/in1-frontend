@@ -1,0 +1,7 @@
+{
+  "id": "12345",
+  "logged_in_as": "12345",
+  "username": "testuser",
+  "email": "test@example.com",
+  "role": "user"
+}
