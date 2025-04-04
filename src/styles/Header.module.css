@@ -393,10 +393,28 @@
 @media (max-width: 900px) {
   .header {
     padding: 0.7rem 1.5rem;
+    margin-bottom: 40px;
   }
   
+  /* Instead, modify the navButtons to be compact on mobile */
   .navButtons {
-    display: none;
+    position: absolute;
+    bottom: -40px; /* Position below the header */
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    background-color: rgba(234, 246, 253, 0.98);
+    padding: 0.5rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    z-index: 90; /* Slightly lower than header */
+    border-bottom: 1px solid rgba(52, 152, 219, 0.1);
+  }
+  
+  .navButtons button {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
   }
   
   .logoContainer {
@@ -424,8 +442,24 @@
   }
 }
 
-/* Update mobile styles to keep logo larger on smaller screens */
+/* Alternative mobile approach - compact icons */
 @media (max-width: 600px) {
+  /* Convert nav buttons to icon buttons on very small screens */
+  .navButtons {
+    bottom: -36px; /* Slightly smaller height on very small screens */
+    padding: 0.4rem;
+  }
+  
+  .navButtons button {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  /* Adjust header margin for smaller sub-nav */
+  .header {
+    margin-bottom: 36px;
+  }
+  
   .buttonsContainer {
     gap: 0.5rem;
   }
